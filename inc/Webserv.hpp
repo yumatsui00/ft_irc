@@ -5,6 +5,8 @@
 #include <dirent.h>
 #include <fcntl.h>
 #include <iostream>
+#include <map>
+#include <netinet/in.h>
 #include <poll.h>
 #include <string.h>
 #include <signal.h>
@@ -15,6 +17,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <vector>
+#include <cstdlib>
+
 
 
 

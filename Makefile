@@ -6,9 +6,9 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 DEBUGFLAG = -g -fsanitize=address
 INCLUDES = -I$(HEADERDIR)
 
-FILES = example
+FILES = Socket
 SRCFILE = main.cpp
-HEADERFILE = 
+HEADERFILE = Webserv.hpp
 
 SRCFILE += $(FILES:=.cpp)
 SRCDIR = src
@@ -33,6 +33,7 @@ $(NAME): $(OBJ) $(HEADER)
 	@echo $(BRIGHT_BLUE)"░░████╔═████║░██╔══╝░░██╔══██╗░╚═══██╗██╔══╝░░██╔══██╗░╚████╔╝░"
 	@echo $(BRIGHT_MAGENTA)"░░╚██╔╝░╚██╔╝░███████╗██████╦╝██████╔╝███████╗██║░░██║░░╚██╔╝░░"
 	@echo $(BRIGHT_CYAN)"░░░╚═╝░░░╚═╝░░╚══════╝╚═════╝░╚═════╝░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░"
+
 
 all: $(NAME)
 
@@ -59,13 +60,13 @@ echo:
 	echo $(FILES) $(SRC) $(OBJ) $(HEADER)
 
 test:
+	# google-chrome 127.0.0.1:5000
 	@./$(NAME)
 
 leak: $(NAME)
 	$(LEAK) ./$(NAME)
 
-con:
-	echo "/connect 127.0.0.1 5000 0000"
+
 
 .PHONY: all clean fclean re leak bonus
 
