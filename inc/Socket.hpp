@@ -5,7 +5,7 @@
 
 #define SERVER_ADDR "127.0.0.1"
 #define SERVER_PORT 8080
-#define BUF_SIZE 1024
+#define BUF_SIZE 16384
 #define	MAX_FD	200
 
 extern bool	g_active;
@@ -13,6 +13,7 @@ extern bool	g_active;
 class	Socket
 {
 	private:
+		// int		_i;//後で消す
 		int		_socket;
 		int		_fd;
 		int		_send_buffer_size;
@@ -26,15 +27,17 @@ class	Socket
 		void	_set_non_blocking(int fd);
 		void	_get_send_buffer_size();
 		void	_set_epfd();
+		Socket();
+		void	_exit_mes(const char *mes);
 	public:
+		~Socket();
 		Socket(int port_server);
 		void	run();
-		
-		void Connect();
-
-		void SendText(const char* text);
-		void RecvText();
+		void	event_epollout(int fd);
+		void	event_epollin(int fd);
+		void	recv_fd(int i);
+		void	send_fd(int i);
+		void	new_connection();
 };
-
 
 #endif

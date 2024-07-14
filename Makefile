@@ -60,15 +60,15 @@ echo:
 	echo $(FILES) $(SRC) $(OBJ) $(HEADER)
 
 test:
-	# google-chrome 127.0.0.1:5000
 	@./$(NAME)
 
 leak: $(NAME)
 	$(LEAK) ./$(NAME)
 
+memo:
+	@echo "google-chrome 127.0.0.1:5000"
 
-
-.PHONY: all clean fclean re leak bonus
+.PHONY: all clean fclean re leak bonus memo
 
 
 
