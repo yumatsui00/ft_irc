@@ -6,9 +6,9 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 DEBUGFLAG = -g -fsanitize=address
 INCLUDES = -I$(HEADERDIR)
 
-FILES = Socket
+FILES = Socket Server
 SRCFILE = main.cpp
-HEADERFILE = Webserv.hpp
+HEADERFILE = Webserv.hpp 
 
 SRCFILE += $(FILES:=.cpp)
 SRCDIR = src

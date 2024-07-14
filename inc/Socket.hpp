@@ -27,11 +27,11 @@ class	Socket
 		void	_set_non_blocking(int fd);
 		void	_get_send_buffer_size();
 		void	_set_epfd();
-		Socket();
 		void	_exit_mes(const char *mes);
 	public:
-		~Socket();
+		Socket();
 		Socket(int port_server);
+		~Socket();
 		void	run();
 		void	event_epollout(int fd);
 		void	event_epollin(int fd);

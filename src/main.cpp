@@ -1,4 +1,5 @@
 #include "Socket.hpp"
+#include "Server.hpp"
 
 bool	g_active = true;
 
@@ -10,13 +11,12 @@ void	signal_handler(int signum)
 
 int main ()
 {
-	Socket socket(5000);
-
+	Server server("file");
 	signal(SIGINT, signal_handler);
 
 	while (g_active)
 	{
-		socket.run();
+		server.run();
 	}
 	return (0);
 }
