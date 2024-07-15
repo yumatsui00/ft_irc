@@ -1,7 +1,9 @@
-#ifndef WEBSERV_HPP
-# define WEBSERV_HPP
+#ifndef IRC_HPP
+# define IRC_HPP
 
 #include <arpa/inet.h>
+#include <cerrno>
+#include <cstdlib>
 #include <dirent.h>
 #include <fcntl.h>
 #include <iostream>
@@ -18,7 +20,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <vector>
-#include <cstdlib>
 
 
 

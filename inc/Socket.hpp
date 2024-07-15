@@ -1,7 +1,7 @@
 #ifndef SOCKET_HPP
 # define SOCKET_HPP
 
-#include "Webserv.hpp"
+#include "irc.hpp"
 
 #define SERVER_ADDR "127.0.0.1"
 #define SERVER_PORT 8080
@@ -13,7 +13,6 @@ extern bool	g_active;
 class	Socket
 {
 	private:
-		 int		_i;//後で消す
 		int		_socket;
 		int		_fd;
 		int		_send_buffer_size;

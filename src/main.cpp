@@ -11,7 +11,7 @@ void	signal_handler(int signum)
 
 int main ()
 {
-	Server server("file");
+	Server server;
 	signal(SIGINT, signal_handler);
 
 	while (g_active)
