@@ -72,7 +72,7 @@ void	Socket::run(){
 
 void	Socket::_exit_mes(const char *mes){
 	std::cerr << mes << std::endl;
-	exit(EXIT_FAILURE);
+	std::exit(EXIT_FAILURE);
 }
 
 void	Socket::event_epollout(int fd){
@@ -104,14 +104,18 @@ void	Socket::new_connection(){
 
 void	Socket::recv_fd(int i){
 	_fd = _events[i].data.fd;
-	char	buf[BUF_SIZE + 1];
+	std::string buf(BUF_SIZE, '\0');
 	ssize_t	byte;
-	byte = read(_fd, buf, BUF_SIZE);
+	byte = read(_fd, &buf[0], BUF_SIZE);
 	if (byte == -1){
-		std::cerr << "Read error on fd " << _fd << std::endl;
-		close(_fd);
-		epoll_ctl(_epfd, EPOLL_CTL_DEL, _fd, &_events[i]);
-		return ;
+		if (errno == EAGAIN) // errno == EWOULDBLOCK 同じらしい
+			std::cerr << "Read would block on fd " << _fd << std::endl;
+		else{
+			std::cerr << "Read error on fd " << _fd << std::endl;
+			close(_fd);
+			epoll_ctl(_epfd, EPOLL_CTL_DEL, _fd, &_events[i]);
+			return ;
+		}
 	}
 	else if (byte == 0){
 		std::cerr << "Connection closed on fd " << _fd << std::endl;
@@ -120,10 +124,9 @@ void	Socket::recv_fd(int i){
 		return ;
 	}
 	std::cout << "Reciver from " << _fd << std::endl << buf;
-	memset(buf, 0, BUF_SIZE + 1);
-	 if (_i % 2 == 0)
-	 	event_epollout(_fd);
-	 _i ++;
+	// if (_i % 2 == 0)
+	// 	event_epollout(_fd);
+	// _i ++;
 }
 
 void	Socket::send_fd(int i){
@@ -132,9 +135,15 @@ void	Socket::send_fd(int i){
 	std::string  buf = "BAKA\n";
 	byte = send(_fd, buf.c_str(), buf.size(), 0);
 	if (byte == -1){
+		if (errno == EAGAIN)
+			std::cerr << "Send Would block on fd " << _fd << std::endl;
+		else{
 		std::cerr << "Send error on fd " << _fd << std::endl;
-		close(_fd);
-		epoll_ctl(_epfd, EPOLL_CTL_DEL, _fd, &_events[i]);
+			close(_fd);
+			epoll_ctl(_epfd, EPOLL_CTL_DEL, _fd, &_events[i]);
+			return ;
+		}
 	}
-	event_epollin(_fd);
+	else if (byte > 0)
+		event_epollin(_fd);
 }
