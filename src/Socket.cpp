@@ -121,16 +121,16 @@ void	Socket::recv_fd(int i){
 	}
 	std::cout << "Reciver from " << _fd << std::endl << buf;
 	memset(buf, 0, BUF_SIZE + 1);
-	// if (_i % 2 == 0)
-	// 	event_epollout(_fd);
-	// _i ++;
+	 if (_i % 2 == 0)
+	 	event_epollout(_fd);
+	 _i ++;
 }
 
 void	Socket::send_fd(int i){
 	ssize_t	byte;
 	_fd = _events[i].data.fd;
-	char buf[_send_buffer_size] = "MAX BAKA\n";
-	byte = send(_fd, buf, _send_buffer_size, 0);
+	std::string  buf = "BAKA\n";
+	byte = send(_fd, buf.c_str(), buf.size(), 0);
 	if (byte == -1){
 		std::cerr << "Send error on fd " << _fd << std::endl;
 		close(_fd);

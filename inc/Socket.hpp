@@ -13,7 +13,7 @@ extern bool	g_active;
 class	Socket
 {
 	private:
-		// int		_i;//後で消す
+		 int		_i;//後で消す
 		int		_socket;
 		int		_fd;
 		int		_send_buffer_size;
