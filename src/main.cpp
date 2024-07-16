@@ -9,11 +9,12 @@ void	signal_handler(int signum)
 	g_active = false;
 }
 
-int main (int ac, char **argv)
+int main (int ac, char **av)
 {
-	if (ac != 3){
-		std::cerr << "./ircserv <port> <password>" << std::endl;
-	}
+	// if (ac != 3){
+	// 	std::cerr << "./ircserv <port> <password>" << std::endl;
+	// }
+	(void)av, (void)ac;
 	Server server;
 	signal(SIGINT, signal_handler);
 
