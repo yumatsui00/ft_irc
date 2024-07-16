@@ -11,18 +11,21 @@ Socket::Socket(int port_server){
     _addr_server.sin_addr.s_addr = INADDR_ANY;
     _addr_server.sin_port = htons(port_server);
     _addr_server.sin_family = AF_INET;
-	_socket = socket(AF_INET, SOCK_STREAM, 0);//error
+	if ((_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		_exit_mes("socket");
 	_set_non_blocking(_socket);
 	_get_send_buffer_size();
 	if ((bind(_socket, (sockaddr*)&_addr_server, sizeof(_addr_server))) < 0)
-		_exit_mes("bind");//error
-	memset(&_ev, 0, sizeof(struct epoll_event));
+		_exit_mes("bind");
+	std::memset(&_ev, 0, sizeof(struct epoll_event));
 	_ev.events = EPOLLIN;
 	_ev.data.fd = _socket;
 	_set_epfd();
 	if (epoll_ctl(_epfd, EPOLL_CTL_ADD, _socket, &_ev) == -1)
 		_exit_mes("epoll_ctl Socket");
-	listen(_socket, SOMAXCONN);
+	if ((listen(_socket, SOMAXCONN)) == -1)
+		_exit_mes("lesten");
+	std::cout << "Server is active Port " << port_server << std::endl;
 }
 
 void	Socket::_set_non_blocking(int fd){
@@ -42,7 +45,7 @@ void	Socket::_get_send_buffer_size(){
 	if (getsockopt(_socket, SOL_SOCKET, SO_SNDBUF, &_send_buffer_size,  &len) == -1){
 		_exit_mes("setsockopt");
 	}
-	std::cout << "Send buffer size = " << _send_buffer_size << std::endl;
+	// std::cout << "Send buffer size = " << _send_buffer_size << std::endl;
 }
 
 void	Socket::_set_epfd(){
@@ -94,7 +97,7 @@ void	Socket::new_connection(){
 	if ((_fd = accept(_socket, (sockaddr*)&_addr_client, &addr_len)) < 0)
 		_exit_mes("accept");
 	_set_non_blocking(_fd);
-	memset(&_ev, 0, sizeof(struct epoll_event));
+	std::memset(&_ev, 0, sizeof(struct epoll_event));
 	_ev.events = EPOLLIN;
 	_ev.data.fd = _fd;
 	if (epoll_ctl(_epfd, EPOLL_CTL_ADD, _fd, &_ev) == -1)
@@ -106,7 +109,7 @@ void	Socket::recv_fd(int i){
 	_fd = _events[i].data.fd;
 	std::string buf(BUF_SIZE, '\0');
 	ssize_t	byte;
-	byte = read(_fd, &buf[0], BUF_SIZE);
+	byte = recv(_fd, &buf[0], BUF_SIZE, 0);
 	if (byte == -1){
 		if (errno == EAGAIN) // errno == EWOULDBLOCK 同じらしい
 			std::cerr << "Read would block on fd " << _fd << std::endl;

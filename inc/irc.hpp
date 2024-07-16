@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <cerrno>
 #include <cstdlib>
+#include <cstring>
 #include <dirent.h>
 #include <fcntl.h>
 #include <iostream>

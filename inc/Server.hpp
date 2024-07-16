@@ -8,10 +8,12 @@ class	Socket;
 
 class	Server:	public Socket
 {
-	private:
+	protected:
+		std::string	_password;
 	public:
 		Server();
-		Server(char *password, int	port);
+		Server(int port, char *pass);
+		std::string	getpassword();
 };
 
 #endif
