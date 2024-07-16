@@ -102,6 +102,7 @@ void	Socket::new_connection(){
 	_ev.data.fd = _fd;
 	if (epoll_ctl(_epfd, EPOLL_CTL_ADD, _fd, &_ev) == -1)
 		_exit_mes("epoll_ctl new_client");
+	//サーバーにユーザー追加
 	std::cout << "New connection on fd " << _fd << std::endl;
 }
 
@@ -115,21 +116,20 @@ void	Socket::recv_fd(int i){
 			std::cerr << "Read would block on fd " << _fd << std::endl;
 		else{
 			std::cerr << "Read error on fd " << _fd << std::endl;
-			close(_fd);
-			epoll_ctl(_epfd, EPOLL_CTL_DEL, _fd, &_events[i]);
+			close_connection(_fd);
 			return ;
 		}
 	}
 	else if (byte == 0){
 		std::cerr << "Connection closed on fd " << _fd << std::endl;
-		close(_fd);
-		epoll_ctl(_epfd, EPOLL_CTL_DEL, _fd, &_events[i]);
+		close_connection(_fd);
 		return ;
 	}
 	std::cout << "Reciver from " << _fd << std::endl << buf;
-	// if (_i % 2 == 0)
-	// 	event_epollout(_fd);
-	// _i ++;
+	static int c = 0;
+	if (c % 5 == 0)
+		event_epollout(_fd);
+	c ++;
 }
 
 void	Socket::send_fd(int i){
@@ -142,11 +142,18 @@ void	Socket::send_fd(int i){
 			std::cerr << "Send Would block on fd " << _fd << std::endl;
 		else{
 		std::cerr << "Send error on fd " << _fd << std::endl;
-			close(_fd);
-			epoll_ctl(_epfd, EPOLL_CTL_DEL, _fd, &_events[i]);
+			close_connection(_fd);
 			return ;
 		}
 	}
 	else if (byte > 0)
 		event_epollin(_fd);
+}
+
+void	Socket::close_connection(int filedescriptor){
+	if ((epoll_ctl(_epfd, EPOLL_CTL_DEL, filedescriptor, NULL)) < 0 )
+		_exit_mes("epoll_ctl close");
+	if ((close(filedescriptor)) < 0)
+		_exit_mes("close");
+	//サーバーからユーザー削除
 }

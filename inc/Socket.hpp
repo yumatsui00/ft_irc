@@ -37,6 +37,7 @@ class	Socket
 		void	recv_fd(int i);
 		void	send_fd(int i);
 		void	new_connection();
+		void	close_connection(int fd);
 };
 
 #endif

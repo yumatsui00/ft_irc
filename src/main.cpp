@@ -5,7 +5,6 @@
 #include <errno.h>
 #include <limits.h>
 
-
 bool	g_active = true;
 
 int	ft_strtol(char *str)
@@ -27,7 +26,7 @@ int	ft_strtol(char *str)
 
 void	signal_handler(int signum)
 {
-	std::cout << "Signal " << signum << " recived";
+	std::cout << "Signal " << signum << " recived" << std::endl;
 	g_active = false;
 }
 
@@ -41,9 +40,9 @@ int main (int ac, char **av)
 	Server server(port, av[2]);
 	signal(SIGINT, signal_handler);
 
-	while (g_active)
-	{
+	while (g_active){
 		server.run();
+		
 	}
 	return (0);
 }
