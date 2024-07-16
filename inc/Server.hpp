@@ -13,7 +13,7 @@ class	Server:	public Socket
 	public:
 		Server();
 		Server(int port, char *pass);
-		std::string	getpassword();
+		~Server();
 };
 
 #endif
