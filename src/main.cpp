@@ -42,7 +42,6 @@ int main (int ac, char **av)
 
 	while (g_active){
 		server.run();
-		
 	}
 	return (0);
 }
