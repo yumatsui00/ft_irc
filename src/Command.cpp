@@ -83,28 +83,28 @@ int	Command::exec( Server &serv ) {
 		return select_pass(serv);
 	else if (_divCmd[0] == "QUIT")
 		return select_quit(serv);
-	else if (_divCmd[0] == "WHO")
-		return select_who(serv);
-	else if (_divCmd[0] == "WHOIS")
-		return select_whois(serv);
+	//else if (_divCmd[0] == "WHO")
+	//	return select_who(serv);
+	//else if (_divCmd[0] == "WHOIS")
+	//	return select_whois(serv);
 	else if (!_user->isRegistered())
 		return (451);
 	else if (_divCmd[0] == "JOIN")
 		return select_join(serv);
-	else if (_divCmd[0] == "PART")
-		return select_part(serv);
-	else if (_divCmd[0] == "PRIVMSG")
-		return select_privmsg(serv);
-	else if (_divCmd[0] == "KICK")
-		return select_kick(serv);
+	//else if (_divCmd[0] == "PART")
+	//	return select_part(serv);
+	//else if (_divCmd[0] == "PRIVMSG")
+	//	return select_privmsg(serv);
+	//else if (_divCmd[0] == "KICK")
+	//	return select_kick(serv);
 	else if (_divCmd[0] == "INVITE")
 		return select_invite(serv);
-	else if (_divCmd[0] == "MODE")
-		return select_mode(serv);
-	else if (_divCmd[0] == "TOPIC")
-		return select_topic(serv);
-	else if (_divCmd[0] == "PING")
-		return select_ping(serv);
+	//else if (_divCmd[0] == "MODE")
+	//	return select_mode(serv);
+	//else if (_divCmd[0] == "TOPIC")
+	//	return select_topic(serv);
+	//else if (_divCmd[0] == "PING")
+	//	return select_ping(serv);
 	return (421);
 } ;
 
@@ -154,7 +154,7 @@ int	Command::select_pass( Server &serv ) {
 
 
 int	Command::select_invite( Server &serv ) {
-	Invite	invite( *this );
+	Invite	invite( *this , serv );
 	return  invite.exec_invite( serv );
 } ;
 
@@ -188,10 +188,10 @@ int	Command::select_join( Server &serv ) {
 //	return 
 //}
 
-//int	Command::select_quit( Server &serv ) {
-
-//	return 
-//}
+int	Command::select_quit( Server &serv ) {
+	Quit	quit( *this );
+	return quit.exec_quit(serv);
+}
 
 //int	Command::select_topic( Server &serv ) {
 
@@ -210,9 +210,8 @@ int	Command::select_join( Server &serv ) {
 //!このmsgは自由？
 void	Command::regisration_message( void ) {
 	std::string msg;
-	msg = "001 " + _user->getNickName() + " :Welcome to the Internet Relay Network "\
-									+ _user->getprefix()? + "\n" ;
-	msg += "002 " + _user->getNickName() + " :Your host is ft_irc, running version 1.0\r\n"
-	_user->ft_send(_user->getFd(), msg)
+	msg = "001 " + _user->getNickName() + " :Welcome to the Internet Relay Network " + _user->getPrefix() + "\n" ;
+	msg += "002 " + _user->getNickName() + " :Your host is ft_irc, running version 1.0\r\n";
+	//_user->ft_send(_user->getFd(), msg);
 }
 

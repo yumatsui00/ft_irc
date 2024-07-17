@@ -1,5 +1,5 @@
 #ifndef NICK_HPP
-# define NICK_HP
+# define NICK_HPP
 
 #include "all.hpp"
 

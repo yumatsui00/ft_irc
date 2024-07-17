@@ -1,7 +1,7 @@
-#ifndef JOIN_HPP
-# define JOIN_HPP
+#ifndef PASS_HPP
+# define PASS_HPP
 
-#include "all.hpp"
+# include "all.hpp"
 
 class Pass : public Command {
 private:
@@ -20,9 +20,9 @@ int	Pass::exec_pass( Server &serv ){
 	_user->setPassword(_lst[1]);
 	if (_user->proceedRegisration(serv))
 		regisration_message();
-	if ()//!今設定したパスワードと、サーバーのパスワードが違ったら
-		//!消す
+	//if ()//!今設定したパスワードと、サーバーのパスワードが違ったら
+	//	//!消す
 	return (0);
 };
 
-# endif
+#endif

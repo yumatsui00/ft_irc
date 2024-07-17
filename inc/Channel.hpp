@@ -16,15 +16,15 @@ class Channel {
 private:
 	std::string								_ch_name;
 	std::string								_topic;
-	std::vector <std::pair<User*, bool>>	_users;//a user who is an operator is true
+	std::vector <std::pair<User*, bool> >	_users;//a user who is an operator is true
 	size_t									_maxUsers;
 	std::string								_pass;
 	std::vector<std::string>				_invitingNameList;
-	bool									_mode_i;
-	bool									_mode_t;
-	bool									_mode_k;
-	bool									_mode_o;
-	bool									_mode_l;
+	bool									_mode_i; //招待モード
+	bool									_mode_t; //topic
+	bool									_mode_k; //password有無
+	bool									_mode_o; //operator付与等
+	bool									_mode_l;//制限
 
 
 	Channel( void ) {};
@@ -33,12 +33,27 @@ public:
 	Channel( const std::string ch_name, User *user );
 	~Channel( void ) {};
 
+	bool	isExist( User *user );
+	bool	isOperator( User *user );
+	bool	isInInvitingList( std::string nickname );
 
+	std::string	getChannelName( void ) const;
+	std::string	getUsersList( void ); //なぜかconst使えない？
+	std::string	getPass( void ) const;
+	std::string	getTopic( void ) const;
+	void		setTopic( std::string newTopic ) ;
 
-	std::string	getChannelName( void );
+	size_t		getMaxusers( void ) const;
+	size_t		getUsersNum( void ) const;
+	User*		nick2User( std::string nickname ) ;
 
-	void	addMember( User *user );
+	void		addMember( User *user );
+	void		addInvitingList( std::string nickname );
+
 	void	setMode( int mode, bool on_off );
+	bool	getMode( int mode );
+
+	void	changePass( std::string newPass );
 };
 
 

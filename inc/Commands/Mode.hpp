@@ -19,7 +19,7 @@ public:
 } ;
 
 Mode::Mode( Command &src, Server &server ) : Command( src ) {
-	//Channelを使用するコマンドは、２つ目の引数に必ずchannel名が来るので、存在したらそれを設定、なかったらNULL
+	//Channelを使用するコマンドは、２つ目の引数にchannel名が来ることが多い、存在したらそれを設定、なかったらNULL
 	if (this->_divCmd[1].empty()) {
 		this->_channel = NULL;
 		return ;
@@ -36,10 +36,8 @@ Mode::Mode( Command &src, Server &server ) : Command( src ) {
 }
 
 void	Mode::modePassword( bool mode, std::string newPass ) {
-	if (mode == true) {
-		this->_channel->setMode(modeK, mode);
-		//途中
-	}
+	this->_channel->setMode(modeK, mode);
+	this->_channel->changePass( newPass );
 }
 
 # endif

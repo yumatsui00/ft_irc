@@ -34,7 +34,7 @@ public:
 	//int			select_part( Server &server );
 	//int			select_ping( Server &server );
 	//int			select_privmsg( Server &server );
-	//int			select_quit( Server &server );
+	int			select_quit( Server &server );
 	//int			select_topic( Server &server );
 	//int			select_who( Server &server );
 	//int			select_whois( Server &sever );

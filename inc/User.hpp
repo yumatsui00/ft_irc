@@ -19,7 +19,7 @@ private:
 	std::string _username;
 	std::string	_password;
 	std::string _hostname;
-	std::string _message;
+	std::string _message; //
 	std::string _cmd_strage; //add
 	User();
 public:
@@ -31,6 +31,8 @@ public:
 	std::string	getUserName( void ) const;
 	std::string	getPassword( void ) const;
 	std::string	getHostName( void ) const;
+
+	std::string	getPrefix( void ) const;
 
 	void		setNickName( std::string &NickName );
 	void		setUserName( std::string &UserName );
@@ -45,6 +47,8 @@ public:
 	std::string	get_cmd_strage( void );
 	void		clear_cmd_strage( void );
 
+
+	bool		operator==( User &rhs );
 } ;
 
 #endif

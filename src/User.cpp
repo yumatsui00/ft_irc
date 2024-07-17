@@ -26,6 +26,23 @@ std::string	User::getHostName( void ) const {
 } ;
 
 
+std::string	User::getPrefix( void ) const {
+	std::string	prefix;
+
+	if (_nickname.empty())
+		prefix = "\?\?\?!";
+	else
+		prefix = _nickname + "!";
+	if (_username.empty())
+		prefix += "\?\?\?!";
+	else
+		prefix = _username + "!";
+	prefix += "@";
+	prefix += _hostname;
+	return (prefix);
+}
+
+
 void	User::setNickName( std::string &NickName ) {
 	this->_nickname = NickName;
 } ;
@@ -41,6 +58,7 @@ void	User::setHostName( std::string &HostName ) {
 void	User::setPassword( std::string &Password ) {
 	this->_password = Password;
 } ;
+
 
 
 
@@ -71,3 +89,10 @@ void		User::clear_cmd_strage( void ) {
 	_cmd_strage.clear();
 	return ;
 }
+
+
+bool	User::operator==( User& rhs ) {
+	if (this == &rhs)
+		return true;
+	return false;
+} ;

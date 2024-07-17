@@ -12,4 +12,9 @@ public:
 	int	exec_quit( Server &server );
 } ;
 
-# endif
+int	Quit::exec_quit( Server &server ) {
+	//byebye
+	return (999);
+}
+
+#endif
