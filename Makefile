@@ -1,4 +1,4 @@
-NAME = webserv
+NAME = ircserv
 DEBUG = debug
 
 CXX = c++
@@ -8,7 +8,7 @@ INCLUDES = -I$(HEADERDIR)
 
 FILES = Socket Server
 SRCFILE = main.cpp
-HEADERFILE = Webserv.hpp 
+HEADERFILE = irc.hpp 
 
 SRCFILE += $(FILES:=.cpp)
 SRCDIR = src
@@ -27,12 +27,14 @@ LEAK = valgrind --tool=memcheck
 $(NAME): $(OBJ) $(HEADER)
 	$(CXX) $(CXXFLAGS) $(OBJ) -o $@
 	@echo
-	@echo $(BRIGHT_RED)"░██╗░░░░░░░██╗███████╗██████╗░░██████╗███████╗██████╗░██╗░░░██╗"
-	@echo $(BRIGHT_GREEN)"░██║░░██╗░░██║██╔════╝██╔══██╗██╔════╝██╔════╝██╔══██╗██║░░░██║"
-	@echo $(BRIGHT_YELLOW)"░╚██╗████╗██╔╝█████╗░░██████╦╝╚█████╗░█████╗░░██████╔╝╚██╗░██╔╝"
-	@echo $(BRIGHT_BLUE)"░░████╔═████║░██╔══╝░░██╔══██╗░╚═══██╗██╔══╝░░██╔══██╗░╚████╔╝░"
-	@echo $(BRIGHT_MAGENTA)"░░╚██╔╝░╚██╔╝░███████╗██████╦╝██████╔╝███████╗██║░░██║░░╚██╔╝░░"
-	@echo $(BRIGHT_CYAN)"░░░╚═╝░░░╚═╝░░╚══════╝╚═════╝░╚═════╝░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░"
+	@echo $(BRIGHT_RED)		"███████╗░████████╗░░░░░░░░░██╗░░██████╗░░░█████╗░"
+	@echo $(BRIGHT_GREEN)	"██╔════╝░╚══██╔══╝░░░░░░░░░██║░░██╔══██╗░██╔══██╗"
+	@echo $(BRIGHT_YELLOW)	"█████╗░░░░░░██║░░░░░░░░░░░░██║░░██████╔╝░██║░░╚═╝"
+	@echo $(BRIGHT_BLUE)	"██╔══╝░░░░░░██║░░░░░░░░░░░░██║░░██╔══██╗░██║░░██╗"
+	@echo $(BRIGHT_MAGENTA)	"██║░░░░░░░░░██║░░░░█████╗░░██║░░██║░░██║░╚█████╔╝"
+	@echo $(BRIGHT_CYAN)	"╚═╝░░░░░░░░░╚═╝░░░░╚════╝░░╚═╝░░╚═╝░░╚═╝░░╚════╝░"
+
+
 
 
 all: $(NAME)
@@ -60,13 +62,14 @@ echo:
 	echo $(FILES) $(SRC) $(OBJ) $(HEADER)
 
 test:
-	@./$(NAME)
+	@./$(NAME) 5000 0000
 
 leak: $(NAME)
 	$(LEAK) ./$(NAME)
 
-memo:
-	@echo "google-chrome 127.0.0.1:5000"
+m:
+	@echo "/connect 127.0.0.1 5000 0000"
+	@echo "nc 127.0.0.1 5000"
 
 .PHONY: all clean fclean re leak bonus memo
 

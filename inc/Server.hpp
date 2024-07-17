@@ -2,14 +2,19 @@
 # define SERVER_HPP
 
 #include "all.hpp"
+#include "irc.hpp"
+#include "Socket.hpp"
 
-class Server {
+class Socket;
+
+class Server : public Socket {
 private:
 	std::vector<User*>		_Users;
 	std::vector<Channel*>	_Channels;
 	std::string				_password;
-public:
 	Server();
+public:
+	Server(int port, char *pass);
 	~Server();
 
 	Channel*	findChannel( std::string ch_name );

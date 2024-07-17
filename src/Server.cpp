@@ -1,4 +1,12 @@
+
 #include "all.hpp"
+#include "irc.hpp"
+#include "Server.hpp"
+
+Server::Server(): Socket(5000){}
+Server::Server(int port, char *pass): Socket(port){_password = pass;}
+Server::~Server(){}
+
 
 Channel*	Server::findChannel( std::string ch_name ) {
 	for (std::vector<Channel*>::iterator it = this->_Channels.begin(); it != _Channels.end(); it++) {
