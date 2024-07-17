@@ -31,6 +31,21 @@
 #include "Command.hpp"
 #include "Server.hpp"
 
+#include "Commands/Nick.hpp"
+#include "Commands/CUser.hpp"
+#include "Commands/Invite.hpp"
+#include "Commands/Join.hpp"
+#include "Commands/Kick.hpp"
+#include "Commands/Mode.hpp"
+#include "Commands/Part.hpp"
+#include "Commands/Pass.hpp"
+#include "Commands/Ping.hpp"
+#include "Commands/Privmsg.hpp"
+#include "Commands/Quit.hpp"
+#include "Commands/Topic.hpp"
+#include "Commands/Who.hpp"
+#include "Commands/Whois.hpp"
+
 //std::vector<std::pair<std::string, int> > t;
 
 #endif

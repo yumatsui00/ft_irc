@@ -5,21 +5,59 @@
 
 
 
-int	User::getFd( void ) {
+int	User::getFd( void ) const {
 	return _fd;
 } ;
 
-std::string	User::getNickName( void ) {
+std::string	User::getNickName( void ) const {
 	return _nickname;
 } ;
 
-std::string	User::getUserName( void ) {
+std::string	User::getUserName( void ) const {
 	return _username;
 } ;
 
-std::string	User::getHostName( void ) {
+std::string User::getPassword( void ) const {
+	return _password;
+}
+
+std::string	User::getHostName( void ) const {
 	return _hostname;
 } ;
+
+
+void	User::setNickName( std::string &NickName ) {
+	this->_nickname = NickName;
+} ;
+
+void	User::setUserName( std::string &UserName ) {
+	this->_username = UserName;
+} ;
+
+void	User::setHostName( std::string &HostName ) {
+	this->_hostname = HostName;
+} ;
+
+void	User::setPassword( std::string &Password ) {
+	this->_password = Password;
+} ;
+
+
+
+bool	User::isRegistered( void ) {
+	return (this->_status == REGISTERED ? true : false );
+} ;
+
+bool	User::proceedRegisration( Server &server ) {
+	if (_status == REGISTERED)
+		return false;
+	if (!_nickname.empty() && !_username.empty() && (_password == server.getPassword())) {
+		this->_status = REGISTERED;
+		return true;
+	}
+	return false;
+} ;
+
 
 void		User::add_cmd_strage( std::string &add ) {
 	this->_cmd_strage += add;
