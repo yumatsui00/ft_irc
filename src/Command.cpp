@@ -95,8 +95,8 @@ int	Command::exec( Server &serv ) {
 	//	return select_part(serv);
 	//else if (_divCmd[0] == "PRIVMSG")
 	//	return select_privmsg(serv);
-	//else if (_divCmd[0] == "KICK")
-	//	return select_kick(serv);
+	else if (_divCmd[0] == "KICK")
+		return select_kick(serv);
 	else if (_divCmd[0] == "INVITE")
 		return select_invite(serv);
 	//else if (_divCmd[0] == "MODE")
@@ -154,7 +154,7 @@ int	Command::select_pass( Server &serv ) {
 
 
 int	Command::select_invite( Server &serv ) {
-	Invite	invite( *this , serv );
+	Invite	invite( *this );
 	return  invite.exec_invite( serv );
 } ;
 
@@ -163,40 +163,40 @@ int	Command::select_join( Server &serv ) {
 	return join.exec_join(serv);
 }
 
-//int	Command::select_kick( Server &serv ) {
+int	Command::select_kick( Server &serv ) {
+	Kick kick( *this, serv );
+	return kick.exec_kick(serv);
+}
 
-//	return 
-//}
-
-//int	Command::select_mode( Server &serv ) {
-
-//	return 
-//}
+int	Command::select_mode( Server &serv ) {
+	Mode mode( *this, serv );
+	return mode.exec_mode(serv);
+}
 
 //int	Command::select_part( Server &serv ) {
 
 //	return 
 //}
 
-//int	Command::select_ping( Server &serv ) {
+int	Command::select_ping( void ) {
+	Ping	ping( *this );
+	return ping.exec_ping();
+}
 
-//	return 
-//}
-
-//int	Command::select_privmsg( Server &serv ) {
-
-//	return 
-//}
+int	Command::select_privmsg( Server &serv ) {
+	Privmsg privmsg( *this, serv );
+	return privmsg.exec_privmsg(serv);
+}
 
 int	Command::select_quit( Server &serv ) {
 	Quit	quit( *this );
 	return quit.exec_quit(serv);
 }
 
-//int	Command::select_topic( Server &serv ) {
-
-//	return 
-//}
+int	Command::select_topic( Server &server ) {
+	Topic topic( *this, server );
+	return topic.exec_topic( server );
+}
 
 //int	Command::select_who( Server &server ) {
 

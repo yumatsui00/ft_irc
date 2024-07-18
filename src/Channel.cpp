@@ -31,6 +31,13 @@ bool	Channel::isInInvitingList( std::string nickname ) {
 	return false;
 }
 
+bool	Channel::isMemberExist( void ) {
+	if (_users.begin() == _users.end())
+		return false;
+	else
+		return true;
+}
+
 User*	Channel::nick2User( std::string nickname ) {
 	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it ++) {
 		if (it->first->getNickName() == nickname)
@@ -60,6 +67,15 @@ void	Channel::addMember( User* user ) {
 		}
 	}
 	return ;
+} ;
+
+void	Channel::delMember( User *user ) {
+	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it++) {
+		if (it->first == user) {
+			_users.erase(it);
+			return ;
+		}
+	}//!operatorが自分をキックしたらオペレーターがいなくなる
 } ;
 
 void	Channel::addInvitingList( std::string nickname ) {
@@ -148,4 +164,29 @@ void	Channel::changePass( std::string newPass ) {
 		_pass = newPass;
 	else
 		_pass = "";
+}
+
+void	Channel::changeLimit( size_t num ) {
+	if (this->_mode_l == true)
+		_maxUsers = num;
+} ;
+
+void	Channel::becomeOperator( User* user ) {
+	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(), it != _users.end(); it++) {
+		if (it->first == user) {
+			it->second = true;
+			return ;
+		}
+	}
+	return ;
+} ;
+
+void	Channel::ceaseOperator( User* user ) {
+	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(), it != _users.end(); it++) {
+		if (it->first == user) {
+			it->second = false;
+			return ;
+		}
+	}
+	return ;
 }

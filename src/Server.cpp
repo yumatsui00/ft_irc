@@ -45,3 +45,13 @@ User*	Server::fd2User(int fd) {
 void	Server::addChannel( Channel *new_Ch ) {
 	_Channels.push_back(new_Ch);
 } ;
+
+void	Server::delChannel( Channel *channel ) {
+	for (std::vector<Channel*>::iterator it = _Channels.begin(); it != _Channels.end(); it ++) {
+		if (*it == channel) {
+			_Channels.erase(it);
+			delete(channel);
+			break ;
+		}
+	}
+}

@@ -36,6 +36,7 @@ public:
 	bool	isExist( User *user );
 	bool	isOperator( User *user );
 	bool	isInInvitingList( std::string nickname );
+	bool	isMemberExist();
 
 	std::string	getChannelName( void ) const;
 	std::string	getUsersList( void ); //なぜかconst使えない？
@@ -48,12 +49,16 @@ public:
 	User*		nick2User( std::string nickname ) ;
 
 	void		addMember( User *user );
+	void		delMember( User *user );
 	void		addInvitingList( std::string nickname );
 
 	void	setMode( int mode, bool on_off );
 	bool	getMode( int mode );
 
 	void	changePass( std::string newPass );
+	void	changeLimit( size_t num );
+	void	becomeOperator( User* user );
+	void	ceaseOperator( User* user );
 };
 
 

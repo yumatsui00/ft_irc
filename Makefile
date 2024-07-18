@@ -6,7 +6,7 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 DEBUGFLAG = -g -fsanitize=address
 INCLUDES = -I$(HEADERDIR)
 
-FILES = Socket Server
+FILES = Socket Server Channel Command User
 SRCFILE = main.cpp
 HEADERFILE = irc.hpp 
 
@@ -27,12 +27,12 @@ LEAK = valgrind --tool=memcheck
 $(NAME): $(OBJ) $(HEADER)
 	$(CXX) $(CXXFLAGS) $(OBJ) -o $@
 	@echo
-	@echo $(BRIGHT_RED)		"███████╗░████████╗░░░░░░░░░██╗░░██████╗░░░█████╗░"
-	@echo $(BRIGHT_GREEN)	"██╔════╝░╚══██╔══╝░░░░░░░░░██║░░██╔══██╗░██╔══██╗"
-	@echo $(BRIGHT_YELLOW)	"█████╗░░░░░░██║░░░░░░░░░░░░██║░░██████╔╝░██║░░╚═╝"
-	@echo $(BRIGHT_BLUE)	"██╔══╝░░░░░░██║░░░░░░░░░░░░██║░░██╔══██╗░██║░░██╗"
-	@echo $(BRIGHT_MAGENTA)	"██║░░░░░░░░░██║░░░░█████╗░░██║░░██║░░██║░╚█████╔╝"
-	@echo $(BRIGHT_CYAN)	"╚═╝░░░░░░░░░╚═╝░░░░╚════╝░░╚═╝░░╚═╝░░╚═╝░░╚════╝░"
+	@echo $(BRIGHT_RED)		"███████╗░████████╗░░░░░░░░████╗░░██████╗░░░░█████╗░"
+	@echo $(BRIGHT_GREEN)	"██╔════╝░╚══██╔══╝░░░░░░░░░██╔╝░░██╔══██╗░░██╔══██╗"
+	@echo $(BRIGHT_YELLOW)	"█████╗░░░░░░██║░░░░░░░░░░░░██║░░░██████╔╝░░██║░░╚═╝"
+	@echo $(BRIGHT_BLUE)	"██╔══╝░░░░░░██║░░░░░░░░░░░░██║░░░██╔══██╗░░██║░░██╗"
+	@echo $(BRIGHT_MAGENTA)	"██║░░░░░░░░░██║░░███████╗░████║░░██║░░██║░░╚█████╔╝"
+	@echo $(BRIGHT_CYAN)	"╚═╝░░░░░░░░░╚═╝░░╚══════╝░░╚══╝░░╚═╝░░╚═╝░░░╚════╝░"
 
 
 

@@ -29,13 +29,13 @@ public:
 	int			select_pass( Server &server );
 	int			select_invite( Server &server );
 	int			select_join( Server &server );
-	//int			select_kick( Server &server );
-	//int			select_mode( Server &server );
+	int			select_kick( Server &server );
+	int			select_mode( Server &server );
 	//int			select_part( Server &server );
-	//int			select_ping( Server &server );
-	//int			select_privmsg( Server &server );
+	int			select_ping( void );
+	int			select_privmsg( Server &server );
 	int			select_quit( Server &server );
-	//int			select_topic( Server &server );
+	int			select_topic( Server &server );
 	//int			select_who( Server &server );
 	//int			select_whois( Server &sever );
 
