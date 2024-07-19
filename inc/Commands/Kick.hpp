@@ -1,7 +1,7 @@
 #ifndef KICK_HPP
 # define KICK_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
 #include "Mode.hpp"
 
 class Kick : public Mode {
@@ -27,7 +27,7 @@ int	Kick::exec_kick( Server &server ) {
 	_channel->delMember(kickedUser);
 	if (!_channel->isMemberExist()) {
 		server.delChannel(_channel);
-		_channel == NULL;
+		_channel = NULL;
 	} // 誰もいなくなったら消す
 }
 

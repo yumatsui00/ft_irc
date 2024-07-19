@@ -4,6 +4,7 @@
 #include "all.hpp"
 #include "Server.hpp"
 
+
 class Command {
 protected:
 	User*						_user;

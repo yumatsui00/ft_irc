@@ -1,7 +1,7 @@
 #ifndef JOIN_HPP
 # define JOIN_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
 #include "Mode.hpp"
 
 class Join : public Mode {
@@ -28,7 +28,7 @@ int	Join::exec_join( Server &server ) {
 		return (475); //ぱすわーどありだけど、引数の数、またはパスワードが異なる
 	if (_channel->getMode(modeL) && _channel->getMaxusers() <= _channel->getUsersNum())
 		return (471); //人数制限ありだけど、すでにオーバーしてる　
-	if (_channel->isExist(_user));
+	if (_channel->isExist(_user))
 		return (0);//すでにいたら、エラーメッセージも出さずに終了
 	_channel->addMember(_user);
 

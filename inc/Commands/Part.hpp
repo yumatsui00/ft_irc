@@ -1,7 +1,7 @@
 #ifndef PART_HPP
 # define PART_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
 
 class Part : public Command {
 private:

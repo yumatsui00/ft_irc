@@ -1,4 +1,5 @@
-#include "all.hpp"
+#include "../inc/all.hpp"
+class Server;
 
 Command::Command( Command &src ) \
 	:_user(src.getUser()), _command(src.getCmd()),\
@@ -93,18 +94,18 @@ int	Command::exec( Server &serv ) {
 		return select_join(serv);
 	//else if (_divCmd[0] == "PART")
 	//	return select_part(serv);
-	//else if (_divCmd[0] == "PRIVMSG")
-	//	return select_privmsg(serv);
+	else if (_divCmd[0] == "PRIVMSG")
+		return select_privmsg(serv);
 	else if (_divCmd[0] == "KICK")
 		return select_kick(serv);
 	else if (_divCmd[0] == "INVITE")
 		return select_invite(serv);
-	//else if (_divCmd[0] == "MODE")
-	//	return select_mode(serv);
-	//else if (_divCmd[0] == "TOPIC")
-	//	return select_topic(serv);
-	//else if (_divCmd[0] == "PING")
-	//	return select_ping(serv);
+	else if (_divCmd[0] == "MODE")
+		return select_mode(serv);
+	else if (_divCmd[0] == "TOPIC")
+		return select_topic(serv);
+	else if (_divCmd[0] == "PING")
+		return select_ping();
 	return (421);
 } ;
 

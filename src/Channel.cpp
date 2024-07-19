@@ -1,4 +1,4 @@
-#include "all.hpp"
+#include "../inc/all.hpp"
 
 Channel::Channel( const std::string ch_name, User *user ) :
 _ch_name(ch_name), _topic(""), _maxUsers(MAXMEMBERS), _pass(""),\
@@ -7,28 +7,43 @@ _mode_i(false), _mode_t(false), _mode_k(false), _mode_o(false), _mode_l(false) {
 }
 
 bool	Channel::isExist( User *user ) {
-	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it ++) {
-		if (it->first == user)
-			return true;
-	}
+	std::map<User*, bool>::iterator it = _users.find(user);
+	if (it != _users.end())
+		return true;
 	return false;
+
+	//for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it ++) {
+	//	if (it->first == user)
+	//		return true;
+	//}
+	//return false;
 } ;
 
 bool	Channel::isOperator( User *user ) {
-	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it ++) {
-		if (it->first == user) {
-			return (it->second);
-		}
-	}
+	std::map<User*, bool>::iterator it = _users.find(user);
+	if (it != _users.end())
+		return (it->second);
 	return false;
+
+	//for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it ++) {
+	//	if (it->first == user) {
+	//		return (it->second);
+	//	}
+	//}
+	//return false;
 }
 
 bool	Channel::isInInvitingList( std::string nickname ) {
-	for (std::vector<std::string>::iterator it = _invitingNameList.begin(); it != _invitingNameList.end(); it++) {
-		if ((*it) == nickname)
-			return true;
-	}
+	std::set<std::string>::iterator it = _invitingNameList.find(nickname);
+	if (it != _invitingNameList.end())
+		return true;
 	return false;
+
+	//for (std::vector<std::string>::iterator it = _invitingNameList.begin(); it != _invitingNameList.end(); it++) {
+	//	if ((*it) == nickname)
+	//		return true;
+	//}
+	//return false;
 }
 
 bool	Channel::isMemberExist( void ) {
@@ -39,7 +54,7 @@ bool	Channel::isMemberExist( void ) {
 }
 
 User*	Channel::nick2User( std::string nickname ) {
-	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it ++) {
+	for (std::map<User*, bool>::iterator it = _users.begin(); it != _users.end(); it ++) {
 		if (it->first->getNickName() == nickname)
 			return (it->first);
 	}
@@ -49,16 +64,19 @@ User*	Channel::nick2User( std::string nickname ) {
 
 
 void	Channel::addMember( User* user ) {
-	for (std::vector<std::pair<User*, bool>>::iterator it = _users.begin(); it != _users.end(); it++) {
-		if (it->first == user)
-			return ;//おなじひとがいたら何もしない
-	}
+	std::map<User*, bool>::iterator it = _users.find(user);
+	if (it != _users.end())
+		return ;
+	//for (std::vector<std::pair<User*, bool>>::iterator it = _users.begin(); it != _users.end(); it++) {
+	//	if (it->first == user)
+	//		return ;//おなじひとがいたら何もしない
+	//}
 	if (this->_users.size() == 0)
-		_users.push_back(std::make_pair(user, true));
+		_users.insert(std::make_pair(user, true));
 	else {
-		_users.push_back(std::make_pair(user, false));
+		_users.insert(std::make_pair(user, false));
 		if (getMode(modeI)) { //もし招待モードだったらリストから消す
-			for (std::vector<std::string>::iterator it = _invitingNameList.begin(); it != _invitingNameList.end(); it++) {
+			for (std::set<std::string>::iterator it = _invitingNameList.begin(); it != _invitingNameList.end(); it++) {
 				if ((*it) == user->getNickName()) {
 					_invitingNameList.erase(it);
 					return ;
@@ -70,23 +88,28 @@ void	Channel::addMember( User* user ) {
 } ;
 
 void	Channel::delMember( User *user ) {
-	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it++) {
-		if (it->first == user) {
-			_users.erase(it);
-			return ;
-		}
-	}//!operatorが自分をキックしたらオペレーターがいなくなる
+	std::map<User*, bool>::iterator it = _users.find(user);
+	if (it != _users.end())
+		_users.erase(it);
+	return ;
+
+	//for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it++) {
+	//	if (it->first == user) {
+	//		_users.erase(it);
+	//		return ;
+	//	}
+	//}//!operatorが自分をキックしたらオペレーターがいなくなる
 } ;
 
 void	Channel::addInvitingList( std::string nickname ) {
-	_invitingNameList.push_back(nickname);
+	_invitingNameList.insert(nickname);
 }
 
 
 std::string Channel::getUsersList( void ) {
 	std::string list;
 
-	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin() ; it != _users.end(); it ++) {
+	for (std::map<User*, bool>::iterator it = _users.begin() ; it != _users.end(); it ++) {
 		if (!list.empty())
 			list += " ";
 		if (it->second == true)
@@ -172,21 +195,31 @@ void	Channel::changeLimit( size_t num ) {
 } ;
 
 void	Channel::becomeOperator( User* user ) {
-	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(), it != _users.end(); it++) {
-		if (it->first == user) {
-			it->second = true;
-			return ;
-		}
-	}
+	std::map<User*, bool>::iterator it = _users.find(user);
+	if (it != _users.end())
+		it->second = true;
 	return ;
+
+	//for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(), it != _users.end(); it++) {
+	//	if (it->first == user) {
+	//		it->second = true;
+	//		return ;
+	//	}
+	//}
+	//return ;
 } ;
 
 void	Channel::ceaseOperator( User* user ) {
-	for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(), it != _users.end(); it++) {
-		if (it->first == user) {
-			it->second = false;
-			return ;
-		}
-	}
+	std::map<User*, bool>::iterator it = _users.find(user);
+	if (it != _users.end())
+		it->second = false;
 	return ;
+
+	//for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(), it != _users.end(); it++) {
+	//	if (it->first == user) {
+	//		it->second = false;
+	//		return ;
+	//	}
+	//}
+	//return ;
 }

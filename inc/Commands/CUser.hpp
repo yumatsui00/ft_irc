@@ -1,7 +1,7 @@
 #ifndef CUSER_HPP
 # define CUSER_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
 
 class CUser : public Command {
 private:

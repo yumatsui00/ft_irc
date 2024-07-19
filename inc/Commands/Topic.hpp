@@ -1,7 +1,7 @@
 #ifndef TOPIC_HPP
 # define TOPIC_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
 #include "Mode.hpp"
 
 class Topic : public Mode {

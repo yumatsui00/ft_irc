@@ -1,7 +1,7 @@
 #ifndef MODE_HPP
 # define MODE_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
 
 class Mode : public Command {
 private:
@@ -13,7 +13,7 @@ protected:
 	Mode() {};
 public:
 	Mode( Command &src ) : Command( src ) {};
-	Mode( Command &src, Server &server ) : Command( src ) {}
+	Mode( Command &src, Server &server );
 	virtual ~Mode() {};
 
 
@@ -32,7 +32,7 @@ Mode::Mode( Command &src, Server &server ) : Command( src ) {
 		return ;
 	}
 	else {
-		for (std::vector<Channel*>::iterator it = server.getChannels().begin(); it != server.getChannels().end(); it++) {
+		for (std::set<Channel*>::iterator it = server.getChannels().begin(); it != server.getChannels().end(); it++) {
 			if ((*it)->getChannelName() == _divCmd[1]) {
 				this->_channel = *it;
 				return ;
@@ -54,7 +54,7 @@ int		Mode::exec_mode( Server &server ) {
 		return (442);
 	if (_divCmd.size() == 2)
 		return (displayCurrentMode());
-	if (!_channel->isOperator(_user));
+	if (!_channel->isOperator(_user))
 		return (482);
 	return (modeChanger( server, _divCmd.size() ));
 } ;

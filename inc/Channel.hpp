@@ -16,10 +16,10 @@ class Channel {
 private:
 	std::string								_ch_name;
 	std::string								_topic;
-	std::vector <std::pair<User*, bool> >	_users;//a user who is an operator is true
+	std::map <User*, bool>					_users;//a user who is an operator is true
 	size_t									_maxUsers;
 	std::string								_pass;
-	std::vector<std::string>				_invitingNameList;
+	std::set<std::string>				_invitingNameList;
 	bool									_mode_i; //招待モード
 	bool									_mode_t; //topic
 	bool									_mode_k; //password有無

@@ -1,11 +1,12 @@
 #ifndef NICK_HPP
 # define NICK_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
+#include "../Server.hpp"
+#include "../Command.hpp"
 
 class Nick : public Command {
 private:
-	std::string	_nonoChars = " @#:!%&";
 	Nick() {};
 public:
 	Nick( Command &src ) : Command( src ) {};
@@ -14,6 +15,7 @@ public:
 } ;
 
 int	Nick::exec_nick( Server &serv ) {
+	std::string	nonoChars = "@ #:!%&";
 	if (this->_user->getPassword().empty()) {
 		//! 先にパスワードが設定されていなければ消す
 	}
@@ -22,8 +24,8 @@ int	Nick::exec_nick( Server &serv ) {
 	if (_lst[1].size() > 9 || _lst[1].empty() || !isalpha(_lst[1][0]))
 		return (432);
 	for (std::string::iterator it = _lst[1].begin(); it != _lst[1].end(); it++) {
-		for (size_t i = 0; _nonoChars.length(); i ++) {
-			if (*it == _nonoChars.at(i))
+		for (size_t i = 0; nonoChars.length(); i ++) {
+			if (*it == nonoChars.at(i))
 				return (432);
 		}
 	}

@@ -1,7 +1,7 @@
 #ifndef PRIVMSG_HPP
 # define PRIVMSG_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
 #include "Mode.hpp"
 
 class Privmsg : public Mode {

@@ -1,7 +1,7 @@
 #ifndef INVITE_HPP
 # define INVITE_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
 
 class Invite : public Command {
 private:

@@ -1,7 +1,7 @@
 #ifndef PING_HPP
 # define PING_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
 
 class Ping : public Command {
 private:

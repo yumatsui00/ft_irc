@@ -1,7 +1,7 @@
 #ifndef QUIT_HPP
 # define QUIT_HPP
 
-#include "all.hpp"
+#include "../all.hpp"
 
 class Quit : public Command {
 private:
