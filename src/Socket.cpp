@@ -45,7 +45,6 @@ void	Socket::_get_send_buffer_size(){
 	if (getsockopt(_socket, SOL_SOCKET, SO_SNDBUF, &_send_buffer_size,  &len) == -1){
 		_exit_mes("setsockopt");
 	}
-	// std::cout << "Send buffer size = " << _send_buffer_size << std::endl;
 }
 
 void	Socket::_set_epfd(){

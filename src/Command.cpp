@@ -1,9 +1,10 @@
-#include "../inc/all.hpp"
+#include "irc.hpp"
+#include "Command.hpp"
+
 class Server;
 
-Command::Command( Command &src ) \
-	:_user(src.getUser()), _command(src.getCmd()),\
-	_divCmd(src.getDivCmd()), _lst(src.getLst()) {};
+Command::Command( Command &src )
+:_user(src._user), _command(src._command), _divCmd(src._divCmd), _lst(src._lst){};
 
 
 void	Command::exec_cmd(std::string &cmds, User *user , Server &serv) {
@@ -32,12 +33,12 @@ void	Command::exec_cmd(std::string &cmds, User *user , Server &serv) {
 	std::istringstream stream(cmds.c_str());
 	while (std::getline(stream, buf))
 		_lst.push_back(buf);
-	std::vector<std::string>::iterator it = _lst.begin();
 	for (std::vector<std::string>::iterator it = _lst.begin(); it != _lst.end(); it ++) {
 		set_cmd(*it);
 		status = exec(serv);
 		if (status == 999)
 			break ;
+		printError(status);
 	}
 
 	//ft_send(fd[0 ~ n], messeage);
@@ -76,139 +77,53 @@ int	Command::exec( Server &serv ) {
 		return 0;
 	else if (_divCmd[0] == "CAP")
 		return 0;
+	else if (_divCmd[0] == "WHO")
+		return 0;
+	else if (_divCmd[0] == "WHOIS")
+		return 0;
 	else if (_divCmd[0] == "NICK")
-		return select_nick(serv);
+		return nick(serv);
 	else if (_divCmd[0] == "USER")
-		return select_user(serv);
+		return user(serv);
 	else if (_divCmd[0] == "PASS")
-		return select_pass(serv);
+		return pass(serv);
 	else if (_divCmd[0] == "QUIT")
-		return select_quit(serv);
-	//else if (_divCmd[0] == "WHO")
-	//	return select_who(serv);
-	//else if (_divCmd[0] == "WHOIS")
-	//	return select_whois(serv);
+		return quit(serv);
 	else if (!_user->isRegistered())
 		return (451);
-	else if (_divCmd[0] == "JOIN")
-		return select_join(serv);
-	//else if (_divCmd[0] == "PART")
-	//	return select_part(serv);
-	else if (_divCmd[0] == "PRIVMSG")
-		return select_privmsg(serv);
-	else if (_divCmd[0] == "KICK")
-		return select_kick(serv);
 	else if (_divCmd[0] == "INVITE")
-		return select_invite(serv);
+		return invite(serv);
+	else if (_divCmd[0] == "JOIN")
+		return join(serv);
+	else if (_divCmd[0] == "KICK")
+		return kick(serv);
 	else if (_divCmd[0] == "MODE")
-		return select_mode(serv);
-	else if (_divCmd[0] == "TOPIC")
-		return select_topic(serv);
+		return mode(serv);
+	else if (_divCmd[0] == "PART")
+		return part(serv);
 	else if (_divCmd[0] == "PING")
-		return select_ping();
+		return ping(serv);
+	else if (_divCmd[0] == "PRIVMSG")
+		return privmsg(serv);
+	else if (_divCmd[0] == "TOPIC")
+		return topic(serv);
 	return (421);
 } ;
 
 
 
-
-
-
-
-
-
-//getters
-User*		Command::getUser( void ) const {
-	return this->_user;
-} ;
-
-std::string Command::getCmd( void ) const {
-	return this->_command;
-} ;
-
-std::vector<std::string>	Command::getDivCmd( void ) const {
-	return this->_divCmd;
-} ;
-
-std::vector<std::string>	Command::getLst( void ) const {
-	return this->_lst;
-} ;
-
-
-
-//exec_select
-
-int	Command::select_nick( Server &serv ) {
-	Nick nick( *this );
-	return nick.exec_nick( serv );
-} ;
-
-int	Command::select_user( Server &serv ) {
-	CUser cuser( *this );
-	return cuser.exec_user( serv );
-} ;
-
-int	Command::select_pass( Server &serv ) {
-	Pass pass( *this );
-	return pass.exec_pass( serv );
-} ;
-
-
-int	Command::select_invite( Server &serv ) {
-	Invite	invite( *this );
-	return  invite.exec_invite( serv );
-} ;
-
-int	Command::select_join( Server &serv ) {
-	Join join( *this, serv );
-	return join.exec_join(serv);
+bool	Command::proceedRegisration( Server &server ) {
+	if (_user->getStatus() == REGISTERED)
+		return false;
+	if (!_user->getNickName().empty() && !_user->getUserName().empty() && _user->getPassword() == server.getPassword()) {
+		_user->setStatus(REGISTERED);
+		return true;
+	}
+	return false;
 }
 
-int	Command::select_kick( Server &serv ) {
-	Kick kick( *this, serv );
-	return kick.exec_kick(serv);
-}
-
-int	Command::select_mode( Server &serv ) {
-	Mode mode( *this, serv );
-	return mode.exec_mode(serv);
-}
-
-//int	Command::select_part( Server &serv ) {
-
-//	return 
-//}
-
-int	Command::select_ping( void ) {
-	Ping	ping( *this );
-	return ping.exec_ping();
-}
-
-int	Command::select_privmsg( Server &serv ) {
-	Privmsg privmsg( *this, serv );
-	return privmsg.exec_privmsg(serv);
-}
-
-int	Command::select_quit( Server &serv ) {
-	Quit	quit( *this );
-	return quit.exec_quit(serv);
-}
-
-int	Command::select_topic( Server &server ) {
-	Topic topic( *this, server );
-	return topic.exec_topic( server );
-}
-
-//int	Command::select_who( Server &server ) {
-
-//}
-
-//int	Command::select_whois( Server &server ) {
-
-//}
 
 
-//!このmsgは自由？
 void	Command::regisration_message( void ) {
 	std::string msg;
 	msg = "001 " + _user->getNickName() + " :Welcome to the Internet Relay Network " + _user->getPrefix() + "\n" ;
@@ -216,3 +131,68 @@ void	Command::regisration_message( void ) {
 	//_user->ft_send(_user->getFd(), msg);
 }
 
+void	Command::printError( int status ) {
+	if (status == 0)
+		return ;
+
+	std::ostringstream oss;
+    oss << status;
+	std::string msg = "ft_irc " + oss.str() + " ";
+	std::string nick = _user->getNickName();
+
+	if (status == 401)
+		msg += nick + " " + _divCmd[1] + " :No such nick/channel\n";
+	else if (status == 403)
+		msg += nick + " " + _divCmd[1] + " :No such channel\n";
+	else if (status == 404)
+		msg += _divCmd[1] + " :Cannot send to channel\n";
+	else if (status == 421)
+		msg += nick + " " + _divCmd[0] + " :Unknown command\n";
+	else if (status == 432)
+		msg += "* " + _divCmd[1] + " :Erroneous Nickname\n";
+	else if (status == 433)
+		msg += "* " + _divCmd[1] + " :Nickname is already in use\n";
+	else if (status == 441)
+		msg += nick + " " + _divCmd[1] + " :You're not on that channel\n";
+	else if (status == 442)
+		msg += nick + " " + _divCmd[1] + " :You're not on that channel\n";
+	else if (status == 443)
+		msg += nick + " " + _divCmd[1] + " :is already on channel\n";
+	else if (status == 451)
+		msg += ":Not registered\n";
+	else if (status == 461)
+		msg += nick + " " + _divCmd[0] + " :Syntax error\n";
+	else if (status == 462)
+		msg += " :You may not reregister\n";
+	else if (status == 464)
+	{
+		if (nick.size() == 0)
+			msg += "* :Password incorrect\n";
+		else
+			msg += nick + " :Password incorrect\n";
+	}
+	else if (status == 471)
+		msg += nick + " " + _divCmd[1] + " :Cannot join channel (+l)\n";
+	else if (status == 473)
+		msg += nick + " " + _divCmd[1] + " :Cannot join channel (+i)\n";
+	else if (status == 475)
+		msg += nick + " " + _divCmd[1] + " :Cannot join channel (+k)\n";
+	else if (status == 476)
+		msg += _divCmd[1] + " :Bad Channel Mask\n";
+	else if (status == 482)
+		msg += nick + " " + _divCmd[1] + " :You're not channel operator\n";
+	else if (status == 341)
+		msg += nick + " " + _divCmd[2] + " :" + _divCmd[1] + "\n";
+	else if (status == 324)
+	{
+		if (_divCmd.size() == 3)
+			msg = _divCmd[1] + " "+  _divCmd[2] + "\n";
+		else
+			msg = _divCmd[1] + " "+ _divCmd[2] + " "+  _divCmd[3] + "\n";
+	}
+	else if (status == 332)
+		msg = _divCmd[1] + " :No topic is set\n";
+	else if (status == 331)
+		msg = _divCmd[1] + " :" + _divCmd[2] + "\n";
+	//!ft_send)
+}

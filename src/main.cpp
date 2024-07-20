@@ -1,5 +1,6 @@
 #include "Socket.hpp"
 #include "Server.hpp"
+#include "irc.hpp"
 
 #include <stdlib.h>
 #include <errno.h>
@@ -42,7 +43,6 @@ int main (int ac, char **av)
 
 	while (g_active){
 		server.run();
-		
 	}
 	return (0);
 }

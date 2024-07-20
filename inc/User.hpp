@@ -1,7 +1,8 @@
 #ifndef USER_HPP
 # define USER_HPP
 
-#include "all.hpp"
+#include "irc.hpp"
+#include "Server.hpp"
 
 enum Status {
 	LOGIN,
@@ -25,28 +26,28 @@ private:
 public:
 	User(int fd);
 	~User();
-
+	//!---------------------GETTER-----------------------------
 	int			getFd( void ) const;
+	Status		getStatus( void ) const;
 	std::string	getNickName( void ) const;
 	std::string	getUserName( void ) const;
 	std::string	getPassword( void ) const;
 	std::string	getHostName( void ) const;
-
 	std::string	getPrefix( void ) const;
+	std::string	get_cmd_strage( void );
 
+	//!---------------------SETTER---------------------------------
 	void		setNickName( std::string &NickName );
 	void		setUserName( std::string &UserName );
 	void		setHostName( std::string &HostName );
 	void		setPassword( std::string &Password );
+	void		setStatus( Status status );
+
+	//!---------------------others--------------------------------
 
 	bool		isRegistered( void );
-	bool		proceedRegisration( Server &server );
-
-
 	void		add_cmd_strage( std::string &cmd );
-	std::string	get_cmd_strage( void );
 	void		clear_cmd_strage( void );
-
 
 	bool		operator==( User &rhs );
 } ;

@@ -22,7 +22,7 @@ class	Socket
 		struct sockaddr_in	_addr_client;
 		struct epoll_event	_events[MAX_FD];
 		struct epoll_event	_ev;
-	
+
 		void	_set_non_blocking(int fd);
 		void	_get_send_buffer_size();
 		void	_set_epfd();

@@ -1,21 +1,7 @@
-#ifndef NICK_HPP
-# define NICK_HPP
+#include "Command.hpp"
 
-#include "../all.hpp"
-#include "../Server.hpp"
-#include "../Command.hpp"
-
-class Nick : public Command {
-private:
-	Nick() {};
-public:
-	Nick( Command &src ) : Command( src ) {};
-	~Nick() {};
-	int	exec_nick( Server &server );
-} ;
-
-int	Nick::exec_nick( Server &serv ) {
-	std::string	nonoChars = "@ #:!%&";
+int		Command::nick( Server &server ) {
+	std::string nonoChars = "@ #:!%&";
 	if (this->_user->getPassword().empty()) {
 		//! 先にパスワードが設定されていなければ消す
 	}
@@ -30,12 +16,10 @@ int	Nick::exec_nick( Server &serv ) {
 		}
 	}
 	//nickname がついてなかったらつける（変更はなし？）
-	if (serv.nick2User(this->_lst[1]))
+	if (server.nick2User(this->_lst[1]))
 		return (433);
 	this->_user->setNickName(this->_lst[1]);
-	if (this->_user->proceedRegisration(serv) == true)
+	if (this->proceedRegisration(server) == true)
 		this->regisration_message();//!regisration accomplished
 	return (0);
 } ;
-
-# endif

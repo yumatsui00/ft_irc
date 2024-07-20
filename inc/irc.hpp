@@ -9,7 +9,9 @@
 #include <fcntl.h>
 #include <iostream>
 #include <map>
+#include <set>
 #include <netinet/in.h>
+#include <istream>
 #include <poll.h>
 #include <string.h>
 #include <signal.h>
@@ -19,6 +21,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sstream>
 #include <unistd.h>
 #include <vector>
 

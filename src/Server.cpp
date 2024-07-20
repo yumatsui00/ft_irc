@@ -1,20 +1,10 @@
-
-#include "../inc/all.hpp"
-#include "../inc/irc.hpp"
-#include "../inc/Server.hpp"
+#include "irc.hpp"
+#include "Server.hpp"
 
 Server::Server(): Socket(5000){}
 Server::Server(int port, char *pass): Socket(port){_password = pass;}
 Server::~Server(){}
 
-
-Channel*	Server::findChannel( std::string ch_name ) {
-	for (std::set<Channel*>::iterator it = this->_Channels.begin(); it != _Channels.end(); it++) {
-		if ((*it)->getChannelName() == ch_name)
-			return (*it);
-	}
-	return NULL;
-}
 
 std::string	Server::getPassword( void ) {
 	return _password;
@@ -22,6 +12,14 @@ std::string	Server::getPassword( void ) {
 
 std::set<Channel*>	Server::getChannels( void ) {
 	return _Channels;
+}
+
+Channel*	Server::findChannel( std::string &ch_name ) {
+	for (std::set<Channel*>::iterator it = this->_Channels.begin(); it != _Channels.end(); it++) {
+		if ((*it)->getChannelName() == ch_name)
+			return (*it);
+	}
+	return NULL;
 }
 
 User*	Server::nick2User(std::string nick) {
@@ -52,12 +50,4 @@ void	Server::delChannel( Channel *channel ) {
 		_Channels.erase(it);
 		delete(channel);
 	}
-
-	//for (std::vector<Channel*>::iterator it = _Channels.begin(); it != _Channels.end(); it ++) {
-	//	if (*it == channel) {
-	//		_Channels.erase(it);
-	//		delete(channel);
-	//		break ;
-	//	}
-	//}
 }

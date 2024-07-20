@@ -1,110 +1,24 @@
-#include "../inc/all.hpp"
+#include "irc.hpp"
+#include "Channel.hpp"
 
-Channel::Channel( const std::string ch_name, User *user ) :
-_ch_name(ch_name), _topic(""), _maxUsers(MAXMEMBERS), _pass(""),\
-_mode_i(false), _mode_t(false), _mode_k(false), _mode_o(false), _mode_l(false) {
+Channel::Channel( const std::string &ch_name, User *user )
+: _ch_name(ch_name), _topic(""), _maxUsers(MAXMEMBERS), _pass("") {
+	_modes[MODE_I] = false;
+	_modes[MODE_T] = false;
+	_modes[MODE_K] = false;
+	_modes[MODE_O] = false;
+	_modes[MODE_L] = false;
 	addMember(user);
-}
-
-bool	Channel::isExist( User *user ) {
-	std::map<User*, bool>::iterator it = _users.find(user);
-	if (it != _users.end())
-		return true;
-	return false;
-
-	//for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it ++) {
-	//	if (it->first == user)
-	//		return true;
-	//}
-	//return false;
-} ;
-
-bool	Channel::isOperator( User *user ) {
-	std::map<User*, bool>::iterator it = _users.find(user);
-	if (it != _users.end())
-		return (it->second);
-	return false;
-
-	//for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it ++) {
-	//	if (it->first == user) {
-	//		return (it->second);
-	//	}
-	//}
-	//return false;
-}
-
-bool	Channel::isInInvitingList( std::string nickname ) {
-	std::set<std::string>::iterator it = _invitingNameList.find(nickname);
-	if (it != _invitingNameList.end())
-		return true;
-	return false;
-
-	//for (std::vector<std::string>::iterator it = _invitingNameList.begin(); it != _invitingNameList.end(); it++) {
-	//	if ((*it) == nickname)
-	//		return true;
-	//}
-	//return false;
-}
-
-bool	Channel::isMemberExist( void ) {
-	if (_users.begin() == _users.end())
-		return false;
-	else
-		return true;
-}
-
-User*	Channel::nick2User( std::string nickname ) {
-	for (std::map<User*, bool>::iterator it = _users.begin(); it != _users.end(); it ++) {
-		if (it->first->getNickName() == nickname)
-			return (it->first);
-	}
-	return NULL;
 } ;
 
 
 
-void	Channel::addMember( User* user ) {
-	std::map<User*, bool>::iterator it = _users.find(user);
-	if (it != _users.end())
-		return ;
-	//for (std::vector<std::pair<User*, bool>>::iterator it = _users.begin(); it != _users.end(); it++) {
-	//	if (it->first == user)
-	//		return ;//おなじひとがいたら何もしない
-	//}
-	if (this->_users.size() == 0)
-		_users.insert(std::make_pair(user, true));
-	else {
-		_users.insert(std::make_pair(user, false));
-		if (getMode(modeI)) { //もし招待モードだったらリストから消す
-			for (std::set<std::string>::iterator it = _invitingNameList.begin(); it != _invitingNameList.end(); it++) {
-				if ((*it) == user->getNickName()) {
-					_invitingNameList.erase(it);
-					return ;
-				}
-			}
-		}
-	}
-	return ;
+
+//!------------------------ GETTER---------------------------------------------------------------------
+
+std::string	Channel::getChannelName( void ) const {
+	return _ch_name;
 } ;
-
-void	Channel::delMember( User *user ) {
-	std::map<User*, bool>::iterator it = _users.find(user);
-	if (it != _users.end())
-		_users.erase(it);
-	return ;
-
-	//for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(); it != _users.end(); it++) {
-	//	if (it->first == user) {
-	//		_users.erase(it);
-	//		return ;
-	//	}
-	//}//!operatorが自分をキックしたらオペレーターがいなくなる
-} ;
-
-void	Channel::addInvitingList( std::string nickname ) {
-	_invitingNameList.insert(nickname);
-}
-
 
 std::string Channel::getUsersList( void ) {
 	std::string list;
@@ -135,78 +49,86 @@ std::string	Channel::getTopic( void ) const {
 	return _topic;
 } ;
 
-void		Channel::setTopic( std::string newTopic ) {
+bool	Channel::getMode( int mode ) {
+	std::map<size_t, bool>::iterator it = _modes.find(mode);
+	if (it != _modes.end())
+		return (it->second);
+	return false;
+}
+
+User*	Channel::nick2User( std::string nickname ) {
+	for (std::map<User*, bool>::iterator it = _users.begin(); it != _users.end(); it ++) {
+		if (it->first->getNickName() == nickname)
+			return (it->first);
+	}
+	return NULL;
+} ;
+
+
+
+
+
+
+//!------------------------ Others---------------------------------------------------------------------
+bool	Channel::isExist( User *user ) {
+	std::map<User*, bool>::iterator it = _users.find(user);
+	if (it != _users.end())
+		return true;
+	return false;
+} ;
+
+bool	Channel::isOperator( User *user ) {
+	std::map<User*, bool>::iterator it = _users.find(user);
+	if (it != _users.end())
+		return (it->second);
+	return false;
+}
+
+bool	Channel::isInInvitingList( std::string nickname ) {
+	std::set<std::string>::iterator it = _invitingNameList.find(nickname);
+	if (it != _invitingNameList.end())
+		return true;
+	return false;
+}
+
+bool	Channel::isMemberExist( void ) {
+	if (_users.begin() == _users.end())
+		return false;
+	else
+		return true;
+}
+void	Channel::setMode( int mode, bool on_off ) {
+	std::map<size_t, bool>::iterator it = _modes.find(mode);
+	if (it != _modes.end())
+		it->second = on_off;
+} ;
+
+void	Channel::setTopic( std::string newTopic ) {
 	_topic = newTopic;
 	return ;
 }
 
-bool	Channel::getMode( int mode ) {
-	switch (mode)
-	{
-		case modeI:
-			return (_mode_i);
-		case modeT:
-			return (_mode_t);
-		case modeK:
-			return (_mode_k);
-		case modeO:
-			return (_mode_o);
-		case modeL:
-			return (_mode_l);
-		default:
-			return (false);
-	}
-}
-
-void	Channel::setMode( int mode, bool on_off ) {
-	switch (mode)
-	{
-		case modeI:
-			this->_mode_i = on_off;
-			break ;
-		case modeT:
-			this->_mode_t = on_off;
-			break ;
-		case modeK:
-			this->_mode_k = on_off;
-			break ;
-		case modeO:
-			this->_mode_o = on_off;
-			break ;
-		case modeL:
-			this->_mode_l = on_off;
-			break ;
-		default:
-			std::cout << "error" << std::endl;
-			break;
-	}
-} ;
-
 void	Channel::changePass( std::string newPass ) {
-	if (this->_mode_k == true)
+	if (_modes[MODE_K] == true)
 		_pass = newPass;
 	else
 		_pass = "";
 }
 
 void	Channel::changeLimit( size_t num ) {
-	if (this->_mode_l == true)
+	if (_modes[MODE_L] == true)
 		_maxUsers = num;
 } ;
+
+void	Channel::addInvitingList( std::string nickname ) {
+	_invitingNameList.insert(nickname);
+}
 
 void	Channel::becomeOperator( User* user ) {
 	std::map<User*, bool>::iterator it = _users.find(user);
 	if (it != _users.end())
 		it->second = true;
 	return ;
-
-	//for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(), it != _users.end(); it++) {
-	//	if (it->first == user) {
-	//		it->second = true;
-	//		return ;
-	//	}
-	//}
-	//return ;
 } ;
 
 void	Channel::ceaseOperator( User* user ) {
@@ -214,12 +136,32 @@ void	Channel::ceaseOperator( User* user ) {
 	if (it != _users.end())
 		it->second = false;
 	return ;
-
-	//for (std::vector<std::pair<User*, bool> >::iterator it = _users.begin(), it != _users.end(); it++) {
-	//	if (it->first == user) {
-	//		it->second = false;
-	//		return ;
-	//	}
-	//}
-	//return ;
 }
+
+void	Channel::delMember( User *user ) {
+	std::map<User*, bool>::iterator it = _users.find(user);
+	if (it != _users.end())
+		_users.erase(it);
+	return ;//!operatorが自分をキックしたらオペレーターがいなくなる
+} ;
+
+void	Channel::addMember( User* user ) {
+	std::map<User*, bool>::iterator it = _users.find(user);
+	if (it != _users.end())
+		return ;
+	if (this->_users.size() == 0)
+		_users.insert(std::make_pair(user, true));
+	else {
+		_users.insert(std::make_pair(user, false));
+		if (getMode(MODE_I)) { //もし招待モードだったらリストから消す
+			for (std::set<std::string>::iterator it = _invitingNameList.begin(); it != _invitingNameList.end(); it++) {
+				if ((*it) == user->getNickName()) {
+					_invitingNameList.erase(it);
+					return ;
+				}
+			}
+		}
+	}
+	return ;
+} ;
+

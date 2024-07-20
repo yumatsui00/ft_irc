@@ -1,8 +1,9 @@
 #ifndef COMMAND_HPP
 # define COMMAND_HPP
 
-#include "all.hpp"
+#include "irc.hpp"
 #include "Server.hpp"
+#include "User.hpp"
 
 
 class Command {
@@ -14,33 +15,42 @@ protected:
 public:
 	explicit	Command( void );
 	Command( Command &src );
-	virtual		~Command( void );
-
-	User*						getUser( void ) const;
-	std::string					getCmd( void ) const ;
-	std::vector<std::string>	getDivCmd( void ) const ;
-	std::vector<std::string>	getLst( void ) const ;
+	~Command( void );
 
 	void		exec_cmd( std::string &command, User *user, Server &server );
 	void		set_cmd( std::string &cmd);
 	int			exec( Server &server );
 
-	int			select_nick( Server &server );
-	int			select_user( Server &server );
-	int			select_pass( Server &server );
-	int			select_invite( Server &server );
-	int			select_join( Server &server );
-	int			select_kick( Server &server );
-	int			select_mode( Server &server );
-	//int			select_part( Server &server );
-	int			select_ping( void );
-	int			select_privmsg( Server &server );
-	int			select_quit( Server &server );
-	int			select_topic( Server &server );
-	//int			select_who( Server &server );
-	//int			select_whois( Server &sever );
+//!-----------------------Commands---------------------------
+	int			nick( Server &server );
+	int			user( Server &server );
+	int			pass( Server &server );
+		bool		proceedRegisration( Server &server );
+	int			invite( Server &server );
+	int			join( Server &server );
+		int			creatChannel( Server &server );
+		int			joinChannel( Server &server, Channel* channel );
+	int			kick( Server &server );
+	int			mode( Server &server );
+		int			displayCurrentMode( Channel* channel );
+		int			modeChanger( Server &server, Channel *channel, size_t size );
+		int			checkNum( std::string num );
+	int			quit( Server &server );
+	int			part( Server &server );
+	int			ping( Server &server );
+	int			privmsg( Server &server );
+	int			topic( Server &server );
 
+//?--------------------messanger----------------------------
+	void		InviteMessanger( void );
+	void		JoinMessanger( Channel* channel );
+	void		KickMessanger( void );
+	int			TopicMessanger( Channel* channel );
 	void		regisration_message( void );
+	void		printError( int status );
+
+
+
 } ;
 
 void 		ft_send(int fd, std::string message);

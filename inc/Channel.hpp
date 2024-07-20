@@ -1,16 +1,19 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
-#include "all.hpp"
+#include "irc.hpp"
+#include "User.hpp"
 
 #define NAMELENGTH 200
 #define MAXMEMBERS 200
 
-#define modeI 1
-#define modeT 2
-#define modeK 3
-#define modeO 4
-#define modeL 5
+#define MODE_I 1
+#define MODE_T 2
+#define MODE_K 3
+#define MODE_O 4
+#define MODE_L 5
+
+class User;
 
 class Channel {
 private:
@@ -20,45 +23,42 @@ private:
 	size_t									_maxUsers;
 	std::string								_pass;
 	std::set<std::string>				_invitingNameList;
-	bool									_mode_i; //招待モード
-	bool									_mode_t; //topic
-	bool									_mode_k; //password有無
-	bool									_mode_o; //operator付与等
-	bool									_mode_l;//制限
-
+	std::map<size_t, bool>					_modes;
 
 	Channel( void ) {};
 public:
 
-	Channel( const std::string ch_name, User *user );
+	Channel( const std::string &ch_name, User *user );
 	~Channel( void ) {};
 
-	bool	isExist( User *user );
-	bool	isOperator( User *user );
-	bool	isInInvitingList( std::string nickname );
-	bool	isMemberExist();
-
+//!------------------------GETTER---------------------------
 	std::string	getChannelName( void ) const;
 	std::string	getUsersList( void ); //なぜかconst使えない？
 	std::string	getPass( void ) const;
 	std::string	getTopic( void ) const;
-	void		setTopic( std::string newTopic ) ;
-
 	size_t		getMaxusers( void ) const;
 	size_t		getUsersNum( void ) const;
+	bool		getMode( int mode );
+
 	User*		nick2User( std::string nickname ) ;
+
+//!------------------------Others---------------------------
+	bool		isExist( User *user );
+	bool		isOperator( User *user );
+	bool		isInInvitingList( std::string nickname );
+	bool		isMemberExist();
+
+	void		setTopic( std::string newTopic ) ;
+	void		setMode( int mode, bool on_off );
+	void		changePass( std::string newPass );
+	void		changeLimit( size_t num );
 
 	void		addMember( User *user );
 	void		delMember( User *user );
 	void		addInvitingList( std::string nickname );
 
-	void	setMode( int mode, bool on_off );
-	bool	getMode( int mode );
-
-	void	changePass( std::string newPass );
-	void	changeLimit( size_t num );
-	void	becomeOperator( User* user );
-	void	ceaseOperator( User* user );
+	void		becomeOperator( User* user );
+	void		ceaseOperator( User* user );
 };
 
 

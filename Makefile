@@ -5,10 +5,15 @@ CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 DEBUGFLAG = -g -fsanitize=address
 INCLUDES = -I$(HEADERDIR)
-
 FILES = Socket Server Channel Command User
-SRCFILE = main.cpp
-HEADERFILE = irc.hpp 
+
+#Commandsfile用
+COMMANDS = Nick Cuser Pass Quit Join Invite Privmsg Kick Mode Ping Part Topic
+COMMANDSFILE = $(addsuffix .cpp, $(COMMANDS))
+COMMANDSDIR = $(addprefix Commands/, $(COMMANDSFILE))
+
+SRCFILE = main.cpp $(COMMANDSDIR)
+HEADERFILE = irc.hpp
 
 SRCFILE += $(FILES:=.cpp)
 SRCDIR = src
@@ -43,7 +48,7 @@ $(DEBUG): $(OBJ) $(HEADER) $(CLIENT)
 	$(CXX) $(CXXFLAGS) $(DEBUGFLAG) $(OBJ) -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADER)
-	@mkdir -p $(OBJDIR)
+	@mkdir -p $(OBJDIR)/Commands
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 $(CLIENT):
