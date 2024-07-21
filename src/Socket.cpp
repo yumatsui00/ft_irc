@@ -127,9 +127,8 @@ void	Socket::recv_fd(int i){
 		close_connection(_fd);
 		return ;
 	}
-	_lst.at(i).first = _fd;
-	_lst.at(i).second = buf;
-	std::cout << "Reciver from " << _fd << std::endl << buf;//ここで確認
+	_lst.push_back(std::make_pair(_fd, buf));
+	// std::cout << "Reciver from " << _fd << std::endl << buf;//ここで確認
 	// static int c = 0;
 	// if (c % 5 == 0)
 	// 	event_epollout(_fd);

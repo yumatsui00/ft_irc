@@ -40,8 +40,12 @@ int main (int ac, char **av)
 	Server server(port, av[2]);
 	signal(SIGINT, signal_handler);
 
+	std::vector<std::pair<int, std::string> >  cmd;
 	while (g_active){
 		server.run();
+		cmd = server.get_command();
+		for (std::vector<std::pair<int, std::string> >::iterator it = cmd.begin(); it != cmd.end(); it ++)
+			std::cout << "form " << (*it).first << " buf " << (*it).second;
 	}
 	return (0);
 }
