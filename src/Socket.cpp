@@ -6,6 +6,7 @@ Socket::~Socket(){
 	close(_socket);
 }
 
+std::vector<std::pair<int, std::string> >	Socket::get_command(){return _lst;}
 
 Socket::Socket(int port_server){   
     _addr_server.sin_addr.s_addr = INADDR_ANY;
@@ -60,6 +61,7 @@ void	Socket::run(){
 			return ;
 		_exit_mes("epoll_wait");
 	}
+	_lst.clear();
 	for(int i = 0; i < _n_events; i ++){
 		if (_events[i].data.fd < 0)
 			continue;
@@ -124,11 +126,12 @@ void	Socket::recv_fd(int i){
 		close_connection(_fd);
 		return ;
 	}
-	std::cout << "Reciver from " << _fd << std::endl << buf;
-	static int c = 0;
-	if (c % 5 == 0)
-		event_epollout(_fd);
-	c ++;
+	_lst.push_back(std::make_pair(_fd, buf));
+	// std::cout << "Reciver from " << _fd << std::endl << buf;//ここで確認
+	// static int c = 0;
+	// if (c % 5 == 0)
+	// 	event_epollout(_fd);
+	// c ++;//ここらへんが送信用
 }
 
 void	Socket::send_fd(int i){

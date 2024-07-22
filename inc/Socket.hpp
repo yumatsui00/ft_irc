@@ -18,6 +18,7 @@ class	Socket
 		int		_send_buffer_size;
 		int		_epfd;
 		int		_n_events;
+		std::vector<std::pair<int, std::string> >	_lst;
 		struct sockaddr_in	_addr_server;
 		struct sockaddr_in	_addr_client;
 		struct epoll_event	_events[MAX_FD];
@@ -27,17 +28,18 @@ class	Socket
 		void	_get_send_buffer_size();
 		void	_set_epfd();
 		void	_exit_mes(const char *mes);
-	public:
-		Socket();
-		Socket(int port_server);
-		~Socket();
-		void	run();
-		void	event_epollout(int fd);
-		void	event_epollin(int fd);
 		void	recv_fd(int i);
 		void	send_fd(int i);
 		void	new_connection();
 		void	close_connection(int fd);
+	public:
+		Socket();
+		Socket(int port_server);
+		~Socket();
+		std::vector<std::pair<int, std::string> >	get_command();
+		void	run();
+		void	event_epollout(int fd);
+		void	event_epollin(int fd);
 };
 
 #endif
