@@ -27,6 +27,10 @@ std::string	User::getHostName( void ) const {
 	return _hostname;
 } ;
 
+std::string User::getMessage ( void ) const {
+	return _message;
+}
+
 std::string	User::getPrefix( void ) const {
 	std::string	prefix;
 
@@ -69,7 +73,13 @@ void	User::setStatus( Status status ) {
 	this->_status = status;
 } ;
 
+void	User::setMessage( std::string &mes ){
+	this->_message += mes;
+}
 
+void	User::clearMessage( void ){
+	this->_message.clear();
+}
 
 //!----------------------------others--------------------------------
 

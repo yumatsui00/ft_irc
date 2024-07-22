@@ -2,7 +2,6 @@
 # define USER_HPP
 
 #include "irc.hpp"
-#include "Server.hpp"
 
 enum Status {
 	LOGIN,
@@ -14,7 +13,6 @@ enum Status {
 class User {
 private:
 	int			_fd;
-	bool		_authenticate;
 	Status		_status;//最初はlogin
 	std::string	_nickname;
 	std::string _username;
@@ -22,10 +20,10 @@ private:
 	std::string _hostname;
 	std::string _message; //
 	std::string _cmd_strage; //add
-	User();
+	User() {};
 public:
-	User(int fd);
-	~User();
+	User(int fd) : _fd(fd) {};
+	~User() {};
 	//!---------------------GETTER-----------------------------
 	int			getFd( void ) const;
 	Status		getStatus( void ) const;
@@ -35,6 +33,7 @@ public:
 	std::string	getHostName( void ) const;
 	std::string	getPrefix( void ) const;
 	std::string	get_cmd_strage( void );
+	std::string getMessage( void ) const;
 
 	//!---------------------SETTER---------------------------------
 	void		setNickName( std::string &NickName );
@@ -42,6 +41,9 @@ public:
 	void		setHostName( std::string &HostName );
 	void		setPassword( std::string &Password );
 	void		setStatus( Status status );
+	void		setMessage( std::string &mes);
+
+	void		clearMessage();
 
 	//!---------------------others--------------------------------
 

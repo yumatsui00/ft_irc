@@ -30,14 +30,14 @@ User*	Server::nick2User(std::string nick) {
 	return NULL;
 } ;
 
-User*	Server::fd2User(int fd) {
-	for(std::set<User*>::iterator it = this->_Users.begin(); it != this->_Users.end(); it++) {
-		if ((*it)->getFd() == fd)
-			return (*it);
-	}
-	//すべてのユーザーに必要なfdが割り当てられてるのでNULLにはならない
-	return (NULL);
-};
+// User*	Server::fd2User(int fd) {
+// 	for(std::set<User*>::iterator it = this->_Users.begin(); it != this->_Users.end(); it++) {
+// 		if ((*it)->getFd() == fd)
+// 			return (*it);
+// 	}
+// 	//すべてのユーザーに必要なfdが割り当てられてるのでNULLにはならない
+// 	return (NULL);
+// };
 
 
 void	Server::addChannel( Channel *new_Ch ) {
@@ -50,4 +50,10 @@ void	Server::delChannel( Channel *channel ) {
 		_Channels.erase(it);
 		delete(channel);
 	}
+}
+
+void	Server::ft_send(int fd, std::string mes){
+	User* user = Socket::fd2User(fd);
+	user->setMessage(mes);
+	Socket::event_epollout(fd);
 }

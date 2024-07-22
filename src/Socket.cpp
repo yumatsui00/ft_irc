@@ -103,7 +103,8 @@ void	Socket::new_connection(){
 	_ev.data.fd = _fd;
 	if (epoll_ctl(_epfd, EPOLL_CTL_ADD, _fd, &_ev) == -1)
 		_exit_mes("epoll_ctl new_client");
-	//サーバーにユーザー追加
+	User *newuser = new User(_fd);
+	_Users.insert(newuser);
 	std::cout << "New connection on fd " << _fd << std::endl;
 }
 
@@ -127,7 +128,7 @@ void	Socket::recv_fd(int i){
 		return ;
 	}
 	_lst.push_back(std::make_pair(_fd, buf));
-	// std::cout << "Reciver from " << _fd << std::endl << buf;//ここで確認
+	std::cout << "Reciver from " << _fd << std::endl << buf;//ここで確認
 	// static int c = 0;
 	// if (c % 5 == 0)
 	// 	event_epollout(_fd);
@@ -137,8 +138,11 @@ void	Socket::recv_fd(int i){
 void	Socket::send_fd(int i){
 	ssize_t	byte;
 	_fd = _events[i].data.fd;
-	std::string  buf = "BAKA\n";
-	byte = send(_fd, buf.c_str(), buf.size(), 0);
+	User *user = fd2User(_fd);
+	std::string	mes = user->getMessage();
+	byte = send(_fd, mes.c_str(), mes.size(), 0);
+	// std::string  buf = "BAKA\n";
+	// byte = send(_fd, buf.c_str(), buf.size(), 0);
 	if (byte == -1){
 		if (errno == EAGAIN)
 			std::cerr << "Send Would block on fd " << _fd << std::endl;
@@ -148,8 +152,10 @@ void	Socket::send_fd(int i){
 			return ;
 		}
 	}
-	else if (byte > 0)
+	else if (byte > 0){
 		event_epollin(_fd);
+		user->clearMessage();
+	}
 }
 
 void	Socket::close_connection(int filedescriptor){
@@ -157,5 +163,17 @@ void	Socket::close_connection(int filedescriptor){
 		_exit_mes("epoll_ctl close");
 	if ((close(filedescriptor)) < 0)
 		_exit_mes("close");
-	//サーバーからユーザー削除
+	User *deluser = fd2User(filedescriptor);
+	_Users.erase(deluser);
+	delete deluser;
 }
+
+
+User*	Socket::fd2User(int fd) {
+	for(std::set<User*>::iterator it = this->_Users.begin(); it != this->_Users.end(); it++) {
+		if ((*it)->getFd() == fd)
+			return (*it);
+	}
+	//すべてのユーザーに必要なfdが割り当てられてるのでNULLにはならない
+	return (NULL);
+};
