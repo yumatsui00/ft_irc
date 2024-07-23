@@ -3,7 +3,7 @@
 
 #include "irc.hpp"
 #include "User.hpp"
-
+#include "Bot.hpp"
 #define NAMELENGTH 200
 #define MAXMEMBERS 200
 
@@ -24,6 +24,7 @@ private:
 	std::string								_pass;
 	std::set<std::string>				_invitingNameList;
 	std::map<size_t, bool>					_modes;
+	Bot										_bot;
 
 	Channel( void ) {};
 public:
