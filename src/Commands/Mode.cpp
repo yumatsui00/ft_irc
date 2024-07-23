@@ -27,8 +27,6 @@ int	Command::displayCurrentMode( Channel *channel, Server &server ) {
 		msg += "i";
 	if ((channel->getMode(MODE_T)))
 		msg += "t";
-	if ((channel->getMode(MODE_O)))
-		msg += "o";
 	if ((channel->getMode(MODE_K)))
 		msg += " " + channel->getPass();
 	if ((channel->getMode(MODE_L))) {
@@ -44,14 +42,14 @@ int	Command::displayCurrentMode( Channel *channel, Server &server ) {
 
 int		Command::modeChanger( Server &server, Channel *channel, size_t size ) {
 	bool		msg_permission = true;
-	std::string mod = _divCmd[1], arg1 = _divCmd[2], arg2;
-	std::string msg = ":" + _user->getPrefix() + " MODE" + mod + " " + arg1;
+	std::string mod = _divCmd[2], chan = _divCmd[2], con;
+	std::string msg = ":" + _user->getPrefix() + " MODE" + mod + " " + chan;
 
 	if (size == 3)
 		msg += "\n";
 	else if (size == 4) {
-		arg2 = _divCmd[3];
-		msg += " " + arg2 + "\n";
+	con = _divCmd[3];
+		msg += " " + con + "\n";
 	}
 
 	if (mod == "+i" && size == 3)
@@ -64,12 +62,12 @@ int		Command::modeChanger( Server &server, Channel *channel, size_t size ) {
 		channel->setMode(MODE_T, false);
 	else if (mod == "+k" && size == 4) {
 		channel->setMode(MODE_K, true);
-		channel->changePass(arg2);
+		channel->changePass(con);
 	}
 	else if (mod == "-k" && size == 4)
 		channel->setMode(MODE_K, false);
 	else if (mod == "+l" && size == 4) {
-		int limit = checkNum(arg2);
+		int limit = checkNum(con);
 		if (limit < 1)
 			return (401); //!err banngou  check
 		channel->setMode(MODE_L, true);
@@ -78,7 +76,7 @@ int		Command::modeChanger( Server &server, Channel *channel, size_t size ) {
 	else if (mod == "-l" && size == 3)
 		channel->setMode(MODE_L, false);
 	else if ((mod == "+o" || mod == "-o") && size == 4) {
-		User* target = channel->nick2User(arg2);
+		User* target = channel->nick2User(con);
 		if (target == NULL)
 			return (441);
 		if (mod == "+o")
@@ -104,7 +102,7 @@ int		Command::checkNum( std::string num ) {
 
 	std::istringstream iss(num);
 	iss >> number;
-	if (iss.eof() && !iss.fail())
+	if (iss.eof() && iss.fail())
 		return (-1);
 	return number;
 }

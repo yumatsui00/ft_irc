@@ -39,7 +39,7 @@ std::string	User::getPrefix( void ) const {
 	if (_username.empty())
 		prefix += "\?\?\?!";
 	else
-		prefix = _username + "!";
+		prefix += _username + "!";
 	prefix += "@";
 	prefix += _hostname;
 	return (prefix);

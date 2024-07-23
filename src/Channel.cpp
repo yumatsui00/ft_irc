@@ -105,6 +105,7 @@ void	Channel::setMode( int mode, bool on_off ) {
 	std::map<size_t, bool>::iterator it = _modes.find(mode);
 	if (it != _modes.end())
 		it->second = on_off;
+	std::cout << "hello" << std::endl;
 } ;
 
 void	Channel::setTopic( std::string newTopic ) {

@@ -10,7 +10,7 @@ int Command::part( Server &server ) {
 		return (442);
 
 	std::string msg;
-	msg = ": " + _user->getPrefix() + " PART " + _divCmd[1];
+	msg = ":" + _user->getPrefix() + " PART " + _divCmd[1];
 	if (_divCmd.size() == 2)
 		msg += " :\n";
 	else
@@ -20,6 +20,8 @@ int Command::part( Server &server ) {
 	for (std::map<User*, bool>::iterator it = users.begin(); it != users.end(); it++) {
 		server.ft_send(it->first->getFd(), msg);
 	}
+
+	channel->delMember(_user);
 	if (!channel->isMemberExist())
 		server.delChannel(channel);
 	return (0);

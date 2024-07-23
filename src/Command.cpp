@@ -66,7 +66,7 @@ void	Command::set_cmd(std::string &cmd) {
 	size_t semq_pos = cmd.find(":");
 	if (semq_pos != std::string::npos) {
 		prefix = cmd.substr(0, semq_pos);
-		suffix = cmd.substr(semq_pos, cmd.size());
+		suffix = cmd.substr(semq_pos + 1, cmd.size());
 	} else
 		prefix = cmd;
 
@@ -83,7 +83,6 @@ void	Command::set_cmd(std::string &cmd) {
 
 
 int	Command::exec( Server &serv ) {
-	c(999, _divCmd);
 	if (_divCmd.empty())
 		return 0;
 	else if (_divCmd[0] == "CAP")
@@ -149,7 +148,7 @@ void	Command::printError( int status, Server& server ) {
 
 	std::ostringstream oss;
     oss << status;
-	std::string msg = "ft_irc " + oss.str() + " ";
+	std::string msg = ":ft_irc " + oss.str() + " ";
 	std::string nick = _user->getNickName();
 
 	if (status == 401)

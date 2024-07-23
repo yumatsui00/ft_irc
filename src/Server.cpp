@@ -3,7 +3,22 @@
 
 Server::Server(): Socket(5000){}
 Server::Server(int port, char *pass): Socket(port){_password = pass;}
-Server::~Server(){}
+Server::~Server(){
+	User *del;
+	std::set<User*>::iterator it = _Users.begin();
+	while (it != _Users.end()){
+		del = *it;
+		it ++;
+		delete del;
+	}
+	Channel *tmp;
+	std::set<Channel*>::iterator itc = _Channels.begin();
+	while (itc != _Channels.end()){
+		tmp = *itc;
+		itc ++;
+		delete tmp;
+	}
+}
 
 
 std::string	Server::getPassword( void ) {

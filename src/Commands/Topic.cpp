@@ -22,7 +22,7 @@ int	Command::TopicMessanger( Channel *channel, Server &server, bool set ) {
 	std::string msg;
 
 	if (set == false) {
-		if (!channel->getTopic().empty())
+		if (channel->getTopic().empty())
 			msg = ":ft_irc 331 " + _user->getNickName() + " " + _divCmd[1] + " :No topic is set\n";
 		else
 			msg = ":ft_irc 332 " + _user->getNickName() + " " + _divCmd[1] + " :" + channel->getTopic() + "\n";
@@ -36,3 +36,5 @@ int	Command::TopicMessanger( Channel *channel, Server &server, bool set ) {
 	}
 	return (0);
 }
+
+//!諸説の部分。４８２のエラー分についても諸説あり。

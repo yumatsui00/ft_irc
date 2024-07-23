@@ -10,13 +10,13 @@ int	Command::privmsg( Server &server ) {
 	if (channel) {
 		std::map<User*, bool> users = channel->getUsers();
 		for (std::map<User*, bool>::iterator it = users.begin(); it != users.end(); it++) {
-			server.ft_send(it->first->getFd(), _divCmd[2]);
+			server.ft_send(it->first->getFd(), msg);
 	}
 	} else {
 		User* target = server.nick2User(_divCmd[1]);
 		if (target == NULL)
 			return (401);
-		server.ft_send(target->getFd(), _divCmd[2]);
+		server.ft_send(target->getFd(), msg);
 	}
 	return (0);
 }

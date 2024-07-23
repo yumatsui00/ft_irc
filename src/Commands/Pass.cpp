@@ -9,8 +9,10 @@ int	Command::pass( Server &server ) {
 		return (462);
 	if (_divCmd[1] == server.getPassword())
 		_user->setPassok( true );
-	else
-		//!userを消す
+	else {
+		server.close_connection(_user->getFd());
+		return (0);
+	}
 	if (proceedRegisration(server))
 		regisration_message(server);
 	return (0);

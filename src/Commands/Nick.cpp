@@ -3,7 +3,8 @@
 int		Command::nick( Server &server ) {
 	char nonoChars[8] = "@ #:!%&";
 	if (!this->_user->getpassok()) {
-		//! 先にパスワードが設定されていなければ消す
+		server.close_connection(_user->getFd());
+		return (0);
 	}
 	if (_divCmd.size() != 2)
 		return (461);
