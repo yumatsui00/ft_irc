@@ -3,20 +3,13 @@
 
 #include "irc.hpp"
 
-enum Status {
-	LOGIN,
-	LOGOUT,
-	REGISTERED,
-	HANDSHAKE,
-} ;
-
 class User {
 private:
 	int			_fd;
-	Status		_status;//最初はlogin
+	bool		_passok; //falseで初期化
+	bool		_registered;//最初はlogin
 	std::string	_nickname;
 	std::string _username;
-	std::string	_password;
 	std::string _hostname;
 	std::string _message; //
 	std::string _cmd_strage; //add
@@ -26,10 +19,10 @@ public:
 	~User() {};
 	//!---------------------GETTER-----------------------------
 	int			getFd( void ) const;
-	Status		getStatus( void ) const;
+	bool		getpassok( void ) const;
+	bool		getStatus( void ) const;
 	std::string	getNickName( void ) const;
 	std::string	getUserName( void ) const;
-	std::string	getPassword( void ) const;
 	std::string	getHostName( void ) const;
 	std::string	getPrefix( void ) const;
 	std::string	get_cmd_strage( void );
@@ -39,8 +32,8 @@ public:
 	void		setNickName( std::string &NickName );
 	void		setUserName( std::string &UserName );
 	void		setHostName( std::string &HostName );
-	void		setPassword( std::string &Password );
-	void		setStatus( Status status );
+	void		setPassok( bool passok );
+	void		setIsRegistered( bool status );
 	void		setMessage( std::string &mes);
 
 	void		clearMessage();

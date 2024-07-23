@@ -39,7 +39,7 @@ public:
 	size_t		getMaxusers( void ) const;
 	size_t		getUsersNum( void ) const;
 	bool		getMode( int mode );
-
+	std::map<User*, bool>	getUsers( void ) const ;
 	User*		nick2User( std::string nickname ) ;
 
 //!------------------------Others---------------------------

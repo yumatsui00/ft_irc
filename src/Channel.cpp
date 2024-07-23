@@ -56,6 +56,10 @@ bool	Channel::getMode( int mode ) {
 	return false;
 }
 
+std::map<User*, bool>	Channel::getUsers( void ) const {
+	return _users;
+};
+
 User*	Channel::nick2User( std::string nickname ) {
 	for (std::map<User*, bool>::iterator it = _users.begin(); it != _users.end(); it ++) {
 		if (it->first->getNickName() == nickname)

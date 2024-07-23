@@ -9,13 +9,13 @@ int	Command::mode( Server &server ) {
 	if (!channel->isExist(_user))
 		return (442);
 	if (_divCmd.size() == 2)
-		return (displayCurrentMode(channel));
+		return (displayCurrentMode(channel, server));
 	if (!channel->isOperator(_user))
 		return (482);
 	return (modeChanger( server, channel, _divCmd.size() ));
 }
 
-int	Command::displayCurrentMode( Channel *channel ) {
+int	Command::displayCurrentMode( Channel *channel, Server &server ) {
 	std::string msg;
 
 	msg = ":ft_irc 324" + _user->getNickName() + _divCmd[1] + " +";
@@ -38,7 +38,7 @@ int	Command::displayCurrentMode( Channel *channel ) {
 		msg += " " + oss.str();
 	}
 	msg += "\n";
-	//!ft_semd(fd, msg) fd = だれ
+	server.ft_send(_user->getFd(), msg);
 	return (0);
 }
 
@@ -88,10 +88,14 @@ int		Command::modeChanger( Server &server, Channel *channel, size_t size ) {
 	}
 	else
 		msg_permission = false;
-	if (msg_permission == true)
-		//ft_send(fd, aef); fd = すべてのひと
 
-	(void)server;//!for compile
+	if (msg_permission == true) {
+		std::map<User*, bool> users = channel->getUsers();
+		for (std::map<User*, bool>::iterator it = users.begin(); it != users.end(); it++) {
+			server.ft_send(it->first->getFd(), msg);
+		}
+	}
+
 	return (0);
 }
 

@@ -8,12 +8,15 @@ int	Command::privmsg( Server &server ) {
 	msg = ":" + _user->getPrefix() + " PRIVMSG " + _divCmd[1] + " :" + _divCmd[2] + "\n";
 	Channel *channel = server.findChannel(_divCmd[1]);
 	if (channel) {
-		//!ft_send(fs, msg);//fd = channel のみなさん
+		std::map<User*, bool> users = channel->getUsers();
+		for (std::map<User*, bool>::iterator it = users.begin(); it != users.end(); it++) {
+			server.ft_send(it->first->getFd(), _divCmd[2]);
+	}
 	} else {
 		User* target = server.nick2User(_divCmd[1]);
 		if (target == NULL)
 			return (401);
-		//!ft_send fd = target
+		server.ft_send(target->getFd(), _divCmd[2]);
 	}
 	return (0);
 }

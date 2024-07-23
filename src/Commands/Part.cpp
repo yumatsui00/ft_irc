@@ -1,5 +1,5 @@
 #include "Command.hpp"
-
+//done
 int Command::part( Server &server ) {
 	if (!(_divCmd.size() == 2 || _divCmd.size() == 3))
 		return (461);
@@ -15,7 +15,11 @@ int Command::part( Server &server ) {
 		msg += " :\n";
 	else
 		msg += " :" + _divCmd[2] + "\n";
-	//ft_send()
+
+	std::map<User*, bool> users = channel->getUsers();
+	for (std::map<User*, bool>::iterator it = users.begin(); it != users.end(); it++) {
+		server.ft_send(it->first->getFd(), msg);
+	}
 	if (!channel->isMemberExist())
 		server.delChannel(channel);
 	return (0);

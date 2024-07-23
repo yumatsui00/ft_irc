@@ -32,7 +32,7 @@ public:
 		int			joinChannel( Server &server, Channel* channel );
 	int			kick( Server &server );
 	int			mode( Server &server );
-		int			displayCurrentMode( Channel* channel );
+		int			displayCurrentMode( Channel* channel, Server &server );
 		int			modeChanger( Server &server, Channel *channel, size_t size );
 		int			checkNum( std::string num );
 	int			quit( Server &server );
@@ -42,12 +42,12 @@ public:
 	int			topic( Server &server );
 
 //?--------------------messanger----------------------------
-	void		InviteMessanger( void );
-	void		JoinMessanger( Channel* channel );
-	void		KickMessanger( void );
-	int			TopicMessanger( Channel* channel );
-	void		regisration_message( void );
-	void		printError( int status );
+	void		InviteMessanger( Server &server, int invitedFd );
+	void		JoinMessanger( Channel* channel, Server &server );
+	void		KickMessanger( Server &server, Channel* channel );
+	int			TopicMessanger( Channel* channel, Server &server, bool set );
+	void		regisration_message( Server &server );
+	void		printError( int status, Server &server );
 
 
 

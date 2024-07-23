@@ -1,5 +1,5 @@
 #include "Command.hpp"
-
+//!
 int		Command::join( Server &server ) {
 	if (!(this->_divCmd.size() == 2 || this->_divCmd.size() == 3))
 		return (461); //command check
@@ -20,7 +20,7 @@ int		Command::creatChannel( Server &server ) {
 		target->setMode(MODE_K, true);
 		target->changePass(_divCmd[2]);
 	}
-	JoinMessanger(target);
+	JoinMessanger(target, server);
 	return (0);
 }
 
@@ -34,13 +34,11 @@ int		Command::joinChannel( Server &server, Channel* channel ) {
 	if (channel->isExist(_user))
 		return (0);//すでにいたら、エラーメッセージも出さずに終了
 	channel->addMember(_user);
-
-	(void)server;//for compile
-	JoinMessanger(channel);
+	JoinMessanger(channel, server);
 	return 0;
 }
 
-void	Command::JoinMessanger( Channel* channel ) {
+void	Command::JoinMessanger( Channel* channel, Server &server ) {
 	std::string msg;
 
 	msg = ":" + _user->getPrefix() + " JOIN :" + _divCmd[1] + "\n";
@@ -49,6 +47,5 @@ void	Command::JoinMessanger( Channel* channel ) {
 	}
 	msg += ":ft_irc 353 " + _user->getNickName() + " = " + _divCmd[1] + " :" + channel->getUsersList() + "\n";
 	msg += ":ft_irc 366 " + _user->getNickName() + " " + _divCmd[1] + " :End of NAMES list\n";
-	//!ft_send(fd ,msg)
-	//fd = Channelの全員
+	server.ft_send(_user->getFd(), msg);
 }

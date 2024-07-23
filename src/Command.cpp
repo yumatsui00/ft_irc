@@ -3,6 +3,15 @@
 
 class Server;
 
+void	c( int status, std::vector<std::string> cmd ) {
+	std::cout << "\n -----check-----" << std::endl;
+	std::cout << "status = " << status << std::endl;
+	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end(); it ++) {
+		std::cout << (*it) << std::endl;
+	}
+	std::cout << "-------------" << std::endl;
+}
+
 Command::Command( Command &src )
 :_user(src._user), _command(src._command), _divCmd(src._divCmd), _lst(src._lst){};
 
@@ -38,7 +47,8 @@ void	Command::exec_cmd(std::string &cmds, User *user , Server &serv) {
 		status = exec(serv);
 		if (status == 999)
 			break ;
-		printError(status);
+		printError(status, serv);
+		c(status, _divCmd);
 	}
 
 	//ft_send(fd[0 ~ n], messeage);
@@ -58,7 +68,7 @@ void	Command::set_cmd(std::string &cmd) {
 		prefix = cmd.substr(0, semq_pos);
 		suffix = cmd.substr(semq_pos, cmd.size());
 	} else
-		suffix = cmd;
+		prefix = cmd;
 
 	size_t found;
 	while ((found = prefix.find("  ")) != std::string::npos)
@@ -67,12 +77,18 @@ void	Command::set_cmd(std::string &cmd) {
 	std::string			buf;
 	while(std::getline(stream, buf, ' '))
 		this->_divCmd.push_back(buf);
+	//!何故かこの１行がないとセグフォ
+	std::cout << _divCmd[0] << std::endl;
 	if (suffix.size() != 0)
 		this->_divCmd.push_back(suffix);
 } ;
 
 
 int	Command::exec( Server &serv ) {
+	//serv.ft_send(_user->getFd(), _divCmd[0] + "\n");
+	//serv.ft_send(_user->getFd(), _divCmd[1] + "\n");
+	//serv.ft_send(_user->getFd(), _divCmd[2]);
+	//std::cout << "arrived here\n" << std::endl;
 	if (_divCmd.empty())
 		return 0;
 	else if (_divCmd[0] == "CAP")
@@ -113,25 +129,26 @@ int	Command::exec( Server &serv ) {
 
 
 bool	Command::proceedRegisration( Server &server ) {
-	if (_user->getStatus() == REGISTERED)
+	if (_user->isRegistered() == true)
 		return false;
-	if (!_user->getNickName().empty() && !_user->getUserName().empty() && _user->getPassword() == server.getPassword()) {
-		_user->setStatus(REGISTERED);
+	if (!_user->getNickName().empty() && !_user->getUserName().empty() && _user->getpassok()) {
+		_user->setIsRegistered(true);
 		return true;
 	}
 	return false;
+	(void)server;
 }
 
 
 
-void	Command::regisration_message( void ) {
+void	Command::regisration_message( Server &server ) {
 	std::string msg;
 	msg = "001 " + _user->getNickName() + " :Welcome to the Internet Relay Network " + _user->getPrefix() + "\n" ;
 	msg += "002 " + _user->getNickName() + " :Your host is ft_irc, running version 1.0\r\n";
-	//_user->ft_send(_user->getFd(), msg);
+	server.ft_send(_user->getFd(), msg);
 }
 
-void	Command::printError( int status ) {
+void	Command::printError( int status, Server& server ) {
 	if (status == 0)
 		return ;
 
@@ -181,18 +198,5 @@ void	Command::printError( int status ) {
 		msg += _divCmd[1] + " :Bad Channel Mask\n";
 	else if (status == 482)
 		msg += nick + " " + _divCmd[1] + " :You're not channel operator\n";
-	else if (status == 341)
-		msg += nick + " " + _divCmd[2] + " :" + _divCmd[1] + "\n";
-	else if (status == 324)
-	{
-		if (_divCmd.size() == 3)
-			msg = _divCmd[1] + " "+  _divCmd[2] + "\n";
-		else
-			msg = _divCmd[1] + " "+ _divCmd[2] + " "+  _divCmd[3] + "\n";
-	}
-	else if (status == 332)
-		msg = _divCmd[1] + " :No topic is set\n";
-	else if (status == 331)
-		msg = _divCmd[1] + " :" + _divCmd[2] + "\n";
-	//!ft_send)
+	server.ft_send(_user->getFd(), msg);
 }

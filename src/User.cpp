@@ -7,9 +7,7 @@ int			User::getFd( void ) const {
 	return _fd;
 } ;
 
-Status		User::getStatus( void ) const {
-	return _status;
-};
+
 
 std::string	User::getNickName( void ) const {
 	return _nickname;
@@ -19,8 +17,8 @@ std::string	User::getUserName( void ) const {
 	return _username;
 } ;
 
-std::string User::getPassword( void ) const {
-	return _password;
+bool		 User::getpassok( void ) const {
+	return _passok;
 }
 
 std::string	User::getHostName( void ) const {
@@ -65,13 +63,10 @@ void	User::setHostName( std::string &HostName ) {
 	this->_hostname = HostName;
 } ;
 
-void	User::setPassword( std::string &Password ) {
-	this->_password = Password;
+void	User::setPassok( bool passok ) {
+	this->_passok = passok;
 } ;
 
-void	User::setStatus( Status status ) {
-	this->_status = status;
-} ;
 
 void	User::setMessage( std::string &mes ){
 	this->_message += mes;
@@ -84,7 +79,11 @@ void	User::clearMessage( void ){
 //!----------------------------others--------------------------------
 
 bool	User::isRegistered( void ) {
-	return (this->_status == REGISTERED ? true : false );
+	return (_registered);
+} ;
+
+void	User::setIsRegistered( bool status ) {
+	_registered = status;
 } ;
 
 void	User::add_cmd_strage( std::string &add ) {

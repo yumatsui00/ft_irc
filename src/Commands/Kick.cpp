@@ -1,5 +1,5 @@
 #include "Command.hpp"
-
+//done
 int	Command::kick( Server &server ) {
 	if (!(_divCmd.size() == 3 || _divCmd.size() == 4))
 		return (461);
@@ -11,7 +11,7 @@ int	Command::kick( Server &server ) {
 	User *kickedUser = channel->nick2User(_divCmd[2]);
 	if (!kickedUser)
 		return (401);
-	KickMessanger();
+	KickMessanger(server, channel);
 	channel->delMember(kickedUser);
 	if (!channel->isMemberExist()) {
 		server.delChannel(channel);
@@ -19,7 +19,7 @@ int	Command::kick( Server &server ) {
 	return (0);
 }
 
-void	Command::KickMessanger( void ) {
+void	Command::KickMessanger( Server &server, Channel *channel ) {
 	std::string msg;
 
 	msg = ":" + _user->getPrefix() + " KICK " + _divCmd[1] + " " + _divCmd[2] + " :";
@@ -27,5 +27,9 @@ void	Command::KickMessanger( void ) {
 		msg += _user->getNickName() + "\n";
 	else
 		msg += _divCmd[3] + "\n";
-	//!ft_send fd = グループの皆様
+
+	std::map<User*, bool> users = channel->getUsers();
+	for (std::map<User*, bool>::iterator it = users.begin(); it != users.end(); it++) {
+		server.ft_send(it->first->getFd(), msg);
+	}
 }
