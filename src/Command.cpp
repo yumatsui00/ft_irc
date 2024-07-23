@@ -77,18 +77,13 @@ void	Command::set_cmd(std::string &cmd) {
 	std::string			buf;
 	while(std::getline(stream, buf, ' '))
 		this->_divCmd.push_back(buf);
-	//!何故かこの１行がないとセグフォ
-	std::cout << _divCmd[0] << std::endl;
 	if (suffix.size() != 0)
 		this->_divCmd.push_back(suffix);
 } ;
 
 
 int	Command::exec( Server &serv ) {
-	//serv.ft_send(_user->getFd(), _divCmd[0] + "\n");
-	//serv.ft_send(_user->getFd(), _divCmd[1] + "\n");
-	//serv.ft_send(_user->getFd(), _divCmd[2]);
-	//std::cout << "arrived here\n" << std::endl;
+	c(999, _divCmd);
 	if (_divCmd.empty())
 		return 0;
 	else if (_divCmd[0] == "CAP")
