@@ -5,10 +5,15 @@ CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 DEBUGFLAG = -g -fsanitize=address
 INCLUDES = -I$(HEADERDIR)
+FILES = Socket Server Channel Command User
 
-FILES = Socket Server
-SRCFILE = main.cpp
-HEADERFILE = irc.hpp 
+#Commandsfile用
+COMMANDS = Nick Cuser Pass Quit Join Invite Privmsg Kick Mode Ping Part Topic
+COMMANDSFILE = $(addsuffix .cpp, $(COMMANDS))
+COMMANDSDIR = $(addprefix Commands/, $(COMMANDSFILE))
+
+SRCFILE = main.cpp $(COMMANDSDIR)
+HEADERFILE = irc.hpp
 
 SRCFILE += $(FILES:=.cpp)
 SRCDIR = src
@@ -27,13 +32,13 @@ LEAK = valgrind --tool=memcheck
 $(NAME): $(OBJ) $(HEADER)
 	$(CXX) $(CXXFLAGS) $(OBJ) -o $@
 	@echo
-	@echo $(BRIGHT_RED)		"███████╗░████████╗░░░░░░░░░██╗░░██████╗░░█████╗░"
-	@echo $(BRIGHT_GREEN)	"██╔════╝░╚══██╔══╝░░░░░░░░░██║░░██╔══██╗██╔══██╗"
-	@echo $(BRIGHT_YELLOW)	"█████╗░░░░░░██║░░░░░░░░░░░░██║░░██████╔╝██║░░╚═╝"
-	@echo $(BRIGHT_BLUE)	"██╔══╝░░░░░░██║░░░░░░░░░░░░██║░░██╔══██╗██║░░██╗"
-	@echo $(BRIGHT_MAGENTA)	"██║░░░░░░░░░██║░░░░█████╗░░██║░░██║░░██║╚█████╔╝"
-	@echo $(BRIGHT_CYAN)	"╚═╝░░░░░░░░░╚═╝░░░░╚════╝░░╚═╝░░╚═╝░░╚═╝░╚════╝░"
-
+	@echo $(BRIGHT_RED)		"███████╗░████████╗░░░░░░░░████╗░░██████╗░░░░█████╗░"
+	@echo $(BRIGHT_GREEN)	"██╔════╝░╚══██╔══╝░░░░░░░░░██╔╝░░██╔══██╗░░██╔══██╗"
+	@echo $(BRIGHT_YELLOW)	"█████╗░░░░░░██║░░░░░░░░░░░░██║░░░██████╔╝░░██║░░╚═╝"
+	@echo $(BRIGHT_BLUE)	"██╔══╝░░░░░░██║░░░░░░░░░░░░██║░░░██╔══██╗░░██║░░██╗"
+	@echo $(BRIGHT_MAGENTA)	"██║░░░░░░░░░██║░░███████╗░████║░░██║░░██║░░╚█████╔╝"
+	@echo $(BRIGHT_CYAN)	"╚═╝░░░░░░░░░╚═╝░░╚══════╝░░╚══╝░░╚═╝░░╚═╝░░░╚════╝░"
+	@echo "/connect 127.0.0.1 5000 0000"
 
 
 
@@ -43,7 +48,7 @@ $(DEBUG): $(OBJ) $(HEADER) $(CLIENT)
 	$(CXX) $(CXXFLAGS) $(DEBUGFLAG) $(OBJ) -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADER)
-	@mkdir -p $(OBJDIR)
+	@mkdir -p $(OBJDIR)/Commands
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 $(CLIENT):
@@ -62,13 +67,14 @@ echo:
 	echo $(FILES) $(SRC) $(OBJ) $(HEADER)
 
 test:
-	@./$(NAME)
+	@./$(NAME) 5000 0000
 
 leak: $(NAME)
 	$(LEAK) ./$(NAME)
 
-memo:
-	@echo "google-chrome 127.0.0.1:5000"
+m:
+	@echo "/connect 127.0.0.1 5000 0000"
+	@echo "nc 127.0.0.1 5000"
 
 .PHONY: all clean fclean re leak bonus memo
 
