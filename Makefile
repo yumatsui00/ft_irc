@@ -67,7 +67,7 @@ echo:
 	echo $(FILES) $(SRC) $(OBJ) $(HEADER)
 
 test:
-	@./$(NAME) 5000 0000
+	@./$(NAME) 5000 0000z
 
 leak: $(NAME)
 	$(LEAK) ./$(NAME)
