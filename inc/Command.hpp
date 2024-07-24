@@ -48,6 +48,7 @@ public:
 	int			TopicMessanger( Channel* channel, Server &server, bool set );
 	void		regisration_message( Server &server );
 	void		printError( int status, Server &server );
+	void		janken( Server &server, std::map<User*, bool> users );
 
 
 
