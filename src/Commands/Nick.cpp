@@ -2,10 +2,10 @@
 
 int		Command::nick( Server &server ) {
 	char nonoChars[8] = "@ #:!%&";
-	if (!this->_user->getpassok()) {
-		server.close_connection(_user->getFd());
-		return (0);
-	}
+	// if (!this->_user->getpassok()) {
+	// 	close(_user->getFd());
+	// 	return (0);
+	// }
 	if (_divCmd.size() != 2)
 		return (461);
 	if (_user->isRegistered())

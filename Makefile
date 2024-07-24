@@ -67,7 +67,11 @@ echo:
 	echo $(FILES) $(SRC) $(OBJ) $(HEADER)
 
 test:
-	@./$(NAME) 5000 0000z
+	@echo "/connect 127.0.0.1 5000 0000"
+	@./$(NAME) 5000 0000
+test1:
+	@echo "/connect 127.0.0.1 5001 0000"
+	@./$(NAME) 5001 0000
 
 leak: $(NAME)
 	$(LEAK) ./$(NAME)

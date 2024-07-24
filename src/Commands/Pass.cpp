@@ -10,7 +10,7 @@ int	Command::pass( Server &server ) {
 	if (_divCmd[1] == server.getPassword())
 		_user->setPassok( true );
 	else {
-		server.close_connection(_user->getFd());
+		close(_user->getFd());
 		return (0);
 	}
 	if (proceedRegisration(server))

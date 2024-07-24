@@ -4,12 +4,13 @@
 class Server;
 
 void	c( int status, std::vector<std::string> cmd ) {
-	std::cout << "\n -----check-----" << std::endl;
-	std::cout << "status = " << status << std::endl;
-	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end(); it ++) {
-		std::cout << (*it) << std::endl;
-	}
-	std::cout << "-------------" << std::endl;
+	// std::cout << "\n -----check-----" << std::endl;
+	// std::cout << "status = " << status << std::endl;
+	// for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end(); it ++) {
+	// 	std::cout << (*it) << std::endl;
+	// }
+	// std::cout << "-------------" << std::endl;
+	(void)status, (void)cmd;
 }
 
 Command::Command( Command &src )
