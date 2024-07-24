@@ -48,4 +48,5 @@ void	Command::JoinMessanger( Channel* channel, Server &server ) {
 	msg += ":ft_irc 353 " + _user->getNickName() + " = " + _divCmd[1] + " :" + channel->getUsersList() + "\n";
 	msg += ":ft_irc 366 " + _user->getNickName() + " " + _divCmd[1] + " :End of NAMES list\n";
 	server.ft_send(_user->getFd(), msg);
+	//msg = channel->bothello(); private msg 風に、　ボットクンカラコンニチハ
 }
