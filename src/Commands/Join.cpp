@@ -49,4 +49,10 @@ void	Command::JoinMessanger( Channel* channel, Server &server ) {
 	msg += ":ft_irc 366 " + _user->getNickName() + " " + _divCmd[1] + " :End of NAMES list\n";
 	server.ft_send(_user->getFd(), msg);
 	//msg = channel->bothello(); private msg 風に、　ボットクンカラコンニチハ
+	//!以下、誰かが参加したらボットくんから挨拶
+	msg = ":じゃんけんbot君 PRIVMSG " + _divCmd[1] + " :じゃんけんしよう！" + "\n";
+	std::map<User*, bool> users = channel->getUsers();
+	for (std::map<User*, bool>::iterator it = users.begin(); it != users.end(); it++) {
+		server.ft_send(it->first->getFd(), msg);
+	}
 }
