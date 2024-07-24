@@ -18,7 +18,7 @@ int	Command::mode( Server &server ) {
 int	Command::displayCurrentMode( Channel *channel, Server &server ) {
 	std::string msg;
 
-	msg = ":ft_irc 324" + _user->getNickName() + _divCmd[1] + " +";
+	msg = ":ft_irc 324" + _user->getNickName() + " "+ _divCmd[1] + " +";
 	if ((channel->getMode(MODE_K)))
 		msg += "k";
 	if ((channel->getMode(MODE_L)))
@@ -42,8 +42,8 @@ int	Command::displayCurrentMode( Channel *channel, Server &server ) {
 
 int		Command::modeChanger( Server &server, Channel *channel, size_t size ) {
 	bool		msg_permission = true;
-	std::string mod = _divCmd[2], chan = _divCmd[2], con;
-	std::string msg = ":" + _user->getPrefix() + " MODE" + mod + " " + chan;
+	std::string chan = _divCmd[1], mod = _divCmd[2], con;
+	std::string msg = ":" + _user->getPrefix() + " MODE " + chan + " " + mod;
 
 	if (size == 3)
 		msg += "\n";
