@@ -2,7 +2,6 @@
 
 int	Command::user( Server &server ) {
 	if (!this->_user->getpassok()) {
-		// std::cout << "kokoka??????" << std::endl;
 		close(_user->getFd());
 		return (0);
 	}

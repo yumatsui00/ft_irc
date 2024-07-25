@@ -30,12 +30,7 @@ Socket::Socket(int port_server){
 }
 
 void	Socket::_set_non_blocking(int fd){
-	int	flags = fcntl(fd, F_GETFL, 0);
-	if (flags == -1){
-		_exit_mes("fcntl F_GETFL");
-	}
-	flags |= O_NONBLOCK;
-	if (fcntl(fd, F_SETFL, flags) == -1){
+	if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1){
 		_exit_mes("fcntl F_SETFL" );
 	}
 }
@@ -137,8 +132,6 @@ void	Socket::send_fd(int i){
 	User *user = fd2User(_fd);
 	std::string	mes = user->getMessage();
 	byte = send(_fd, mes.c_str(), mes.size(), 0);
-	// std::string  buf = "BAKA\n";
-	// byte = send(_fd, buf.c_str(), buf.size(), 0);
 	if (byte == -1){
 		if (errno == EAGAIN)
 			std::cerr << "Send Would block on fd " << _fd << std::endl;
