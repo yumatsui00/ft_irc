@@ -155,8 +155,8 @@ void	Socket::close_connection(int filedescriptor){
 	if ((close(filedescriptor)) < 0)
 		_exit_mes("close");
 	User *deluser = fd2User(filedescriptor);
+	del_user_all(filedescriptor);
 	_Users.erase(deluser);
-	
 	delete deluser;
 }
 
