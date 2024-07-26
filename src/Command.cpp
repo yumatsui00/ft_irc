@@ -21,11 +21,11 @@ void	Command::exec_cmd(std::string &cmds, User *user , Server &serv) {
 	this->_user = user;
 	this->_lst.clear();
 
+	// std::cout << "size=" << cmds.size() << std::endl;
 	//なぜか\rが入っているので消去
 	std::size_t find;
 	while ((find = cmds.find("\r")) != std::string::npos)
 		cmds.erase(find, 1);
-
 	//cmds改行があったらコマンド完成、なかったら未完成のため保存。改行があるかつ最後が改行じゃないのは仕様上同時に送られないらしい、、、ので対応不要
 	find = cmds.find("\n");
 	if (find == std::string::npos) {

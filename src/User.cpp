@@ -88,6 +88,7 @@ void	User::setIsRegistered( bool status ) {
 
 void	User::add_cmd_strage( std::string &add ) {
 	this->_cmd_strage += add;
+	std::cout << _cmd_strage << std::endl;
 } ;
 
 
