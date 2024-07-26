@@ -39,6 +39,7 @@ public:
 	size_t		getUsersNum( void ) const;
 	bool		getMode( int mode );
 	std::map<User*, bool>	getUsers( void ) const ;
+	std::set<std::string>	getInviteList( void ) const;
 	User*		nick2User( std::string nickname ) ;
 
 //!------------------------Others---------------------------
@@ -54,6 +55,7 @@ public:
 
 	void		addMember( User *user );
 	void		delMember( User *user );
+	void		delInvitingList( std::string nick );
 	void		addInvitingList( std::string nickname );
 
 	void		becomeOperator( User* user );
