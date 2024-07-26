@@ -8,7 +8,7 @@ Socket::~Socket(){
 
 std::vector<std::pair<int, std::string> >	Socket::get_command(){return _lst;}
 
-Socket::Socket(int port_server){  
+Socket::Socket(int port_server){
     _addr_server.sin_addr.s_addr = INADDR_ANY;
     _addr_server.sin_port = htons(port_server);
     _addr_server.sin_family = AF_INET;
