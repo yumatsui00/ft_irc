@@ -3,7 +3,7 @@
 int		Command::nick( Server &server ) {
 	char nonoChars[8] = "@ #:!%&";
 	if (!this->_user->getpassok()) {
-		server.close_connection(_user->getFd());
+		close(_user->getFd());
 		return (0);
 	}
 	if (_divCmd.size() != 2)

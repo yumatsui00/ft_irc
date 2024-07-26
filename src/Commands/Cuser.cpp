@@ -2,10 +2,11 @@
 
 int	Command::user( Server &server ) {
 	if (!this->_user->getpassok()) {
-		server.close_connection(_user->getFd());
+		close(_user->getFd());
 		return (0);
 	}
-	if (_user->isRegistered())
+	std::cout << _user->isRegistered() << std::endl;
+	if (_user->isRegistered())//ここバグってるよ
 		return (0); //すでにloginしてある
 	if (_divCmd.size() != 5)
 		return (461);

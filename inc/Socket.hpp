@@ -32,10 +32,10 @@ class	Socket
 		void	recv_fd(int i);
 		void	send_fd(int i);
 		void	new_connection();
+		void	close_connection(int fd);
 	protected:
 		std::set<User*>		_Users;
 	public:
-		void	close_connection(int fd);
 		Socket();
 		Socket(int port_server);
 		~Socket();
