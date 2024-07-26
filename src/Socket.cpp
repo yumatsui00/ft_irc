@@ -105,9 +105,9 @@ void	Socket::new_connection(){
 
 void	Socket::recv_fd(int i){
 	_fd = _events[i].data.fd;
-	std::string buf(BUF_SIZE, '\0');
+	char	buf[BUF_SIZE];
 	ssize_t	byte;
-	byte = recv(_fd, &buf[0], BUF_SIZE, 0);
+	byte = recv(_fd, buf, BUF_SIZE, 0);
 	if (byte == -1){
 		if (errno == EAGAIN) // errno == EWOULDBLOCK 同じらしい
 			std::cerr << "Read would block on fd " << _fd << std::endl;
@@ -122,7 +122,9 @@ void	Socket::recv_fd(int i){
 		close_connection(_fd);
 		return ;
 	}
-	_lst.push_back(std::make_pair(_fd, buf));
+	buf[byte] = 0;
+	std::string buffer = buf;
+	_lst.push_back(std::make_pair(_fd, buffer));
 	std::cout << "Reciver from " << _fd << std::endl << buf;//ここで確認
 }
 
