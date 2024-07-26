@@ -3,7 +3,6 @@
 
 #include "irc.hpp"
 #include "Socket.hpp"
-#include "Channel.hpp"
 
 class User;
 class Channel;
@@ -12,7 +11,7 @@ class Socket;
 class Server : public Socket {
 private:
 	// std::set<User*>		_Users;
-	std::set<Channel*>	_Channels;
+	//std::set<Channel*>	_Channels;
 	std::string			_password;
 	Server();
 public:
@@ -29,7 +28,6 @@ public:
 	void		delChannel( Channel *ch );
 
 	void	ft_send(int fd, std::string mes);
-	void	del_user_all(int fd);
 };
 
 #endif

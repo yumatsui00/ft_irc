@@ -46,8 +46,8 @@ void	Command::exec_cmd(std::string &cmds, User *user , Server &serv) {
 		_lst.push_back(buf);
 	for (std::vector<std::string>::iterator it = _lst.begin(); it != _lst.end(); it ++) {
 		set_cmd(*it);
-		c(status, _divCmd);
 		status = exec(serv);
+		c(status, _divCmd);
 		if (status == 999)
 			break ;
 		printError(status, serv);
