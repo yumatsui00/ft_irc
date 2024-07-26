@@ -4,12 +4,12 @@
 class Server;
 
 void	c( int status, std::vector<std::string> cmd ) {
-	// std::cout << "\n -----check-----" << std::endl;
-	// std::cout << "status = " << status << std::endl;
-	// for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end(); it ++) {
-	// 	std::cout << (*it) << std::endl;
-	// }
-	// std::cout << "-------------" << std::endl;
+	std::cout << "\n -----check-----" << std::endl;
+	std::cout << "status = " << status << std::endl;
+	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end(); it ++) {
+		std::cout << (*it) << std::endl;
+	}
+	std::cout << "-------------" << std::endl;
 	(void)status, (void)cmd;
 }
 
@@ -32,10 +32,11 @@ void	Command::exec_cmd(std::string &cmds, User *user , Server &serv) {
 		this->_user->add_cmd_strage(cmds);
 		return ;
 	} else {
-		cmds.insert(0, this->_user->get_cmd_strage());
+		std::string stored = user->get_cmd_strage();
 		this->_user->clear_cmd_strage();
+		cmds.insert(0, stored);
 	}
-
+	std::cout << "cmd = " << cmds << std::endl;
 	//irssi は改行を復数同時に送れるが、最後が必ず改行になっている仕様
 	//一度に複数のコマンド（改行）が送られてきたときのため_lstで分割して保存
 	int	status;
@@ -45,11 +46,11 @@ void	Command::exec_cmd(std::string &cmds, User *user , Server &serv) {
 		_lst.push_back(buf);
 	for (std::vector<std::string>::iterator it = _lst.begin(); it != _lst.end(); it ++) {
 		set_cmd(*it);
+		c(status, _divCmd);
 		status = exec(serv);
 		if (status == 999)
 			break ;
 		printError(status, serv);
-		c(status, _divCmd);
 	}
 
 	//ft_send(fd[0 ~ n], messeage);

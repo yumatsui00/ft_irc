@@ -35,6 +35,7 @@ int		Command::joinChannel( Server &server, Channel* channel ) {
 		return (0);//すでにいたら、エラーメッセージも出さずに終了
 	channel->addMember(_user);
 	JoinMessanger(channel, server);
+	channel->delInvitingList(_user->getNickName());
 	return 0;
 }
 

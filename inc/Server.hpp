@@ -21,6 +21,7 @@ public:
 
 	std::string	getPassword( void );
 	std::set<Channel*>	getChannels( void );
+	std::string	user2nick( User* user );
 	User*		nick2User(std::string nick);
 	Channel*	findChannel( std::string &ch_name );
 
@@ -28,6 +29,7 @@ public:
 	void		delChannel( Channel *ch );
 
 	void	ft_send(int fd, std::string mes);
+	void	del_user_all(int fd);
 };
 
 #endif

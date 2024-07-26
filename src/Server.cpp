@@ -72,3 +72,23 @@ void	Server::ft_send(int fd, std::string mes){
 	user->setMessage(mes);
 	Socket::event_epollout(fd);
 }
+
+void	Server::del_user_all(int fd) {
+	User* 		user = fd2User(fd);
+	std::string	nick = user->getNickName();
+
+	if (user == NULL)
+		return ;
+	for (std::set<Channel*>::iterator ch = _Channels.begin(); ch != _Channels.end(); ch++) {
+		std::map<User*, bool> usrs = (*ch)->getUsers();
+		for (std::map<User*, bool>::iterator usr = usrs.begin(); usr != usrs.end(); usr++) {
+			if (user == usr->first)
+				(*ch)->delMember(user);
+		}
+		std::set<std::string> invitelist = (*ch)->getInviteList();
+		for (std::set<std::string>::iterator invite = invitelist.begin(); invite != invitelist.end(); invite++) {
+			if (*invite == nick)
+				(*ch)->delInvitingList(nick);
+		}
+	}
+}
