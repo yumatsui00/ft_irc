@@ -48,7 +48,7 @@ void	Command::exec_cmd(std::string &cmds, User *user , Server &serv) {
 		set_cmd(*it);
 		status = exec(serv);
 		c(status, _divCmd);
-		if (status == 999)
+		if (status == QUIT_NUM)
 			break ;
 		printError(status, serv);
 	}
