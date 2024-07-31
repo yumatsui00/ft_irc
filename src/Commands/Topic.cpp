@@ -10,10 +10,8 @@ int	Command::topic( Server &server ) {
 		return (442);//そのチャンネルにいなかったら☓
 	if (_divCmd.size() == 2)
 		return (TopicMessanger(channel, server, false));
-	if (channel->getMode(MODE_T))
+	if (channel->getMode(MODE_T) && !channel->isOperator(_user))
 		return (482); //topic 変更が制限されてたらだめ
-	if (!channel->isOperator(_user))
-		return (482); //operatorじゃなかったら //! 諸説
 	channel->setTopic(_divCmd[2]);
 	return (TopicMessanger(channel, server, true));
 }

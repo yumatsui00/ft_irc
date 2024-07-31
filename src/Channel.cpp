@@ -68,7 +68,9 @@ User*	Channel::nick2User( std::string nickname ) {
 	return NULL;
 } ;
 
-
+std::set<std::string>	Channel::getInviteList( void ) const {
+	return _invitingNameList;
+}
 
 
 
@@ -124,6 +126,13 @@ void	Channel::changeLimit( size_t num ) {
 	if (_modes[MODE_L] == true)
 		_maxUsers = num;
 } ;
+
+void	Channel::delInvitingList( std::string nickname ) {
+	for (std::set<std::string>::iterator it = _invitingNameList.begin(); it != _invitingNameList.end(); it++) {
+		if (nickname == (*it))
+			_invitingNameList.erase(nickname);
+	}
+}
 
 void	Channel::addInvitingList( std::string nickname ) {
 	_invitingNameList.insert(nickname);

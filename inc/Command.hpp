@@ -5,6 +5,7 @@
 #include "Server.hpp"
 #include "User.hpp"
 
+#define QUIT_NUM 999
 
 class Command {
 protected:

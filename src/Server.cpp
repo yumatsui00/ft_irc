@@ -72,3 +72,4 @@ void	Server::ft_send(int fd, std::string mes){
 	user->setMessage(mes);
 	Socket::event_epollout(fd);
 }
+

@@ -8,7 +8,7 @@ Socket::~Socket(){
 
 std::vector<std::pair<int, std::string> >	Socket::get_command(){return _lst;}
 
-Socket::Socket(int port_server){  
+Socket::Socket(int port_server){
     _addr_server.sin_addr.s_addr = INADDR_ANY;
     _addr_server.sin_port = htons(port_server);
     _addr_server.sin_family = AF_INET;
@@ -155,6 +155,7 @@ void	Socket::close_connection(int filedescriptor){
 	if ((close(filedescriptor)) < 0)
 		_exit_mes("close");
 	User *deluser = fd2User(filedescriptor);
+	del_user_all(filedescriptor);
 	_Users.erase(deluser);
 	delete deluser;
 }
@@ -168,3 +169,23 @@ User*	Socket::fd2User(int fd) {
 	//すべてのユーザーに必要なfdが割り当てられてるのでNULLにはならない
 	return (NULL);
 };
+
+void	Socket::del_user_all(int fd) {
+	User* 		user = fd2User(fd);
+	std::string	nick = user->getNickName();
+
+	if (user == NULL)
+		return ;
+	for (std::set<Channel*>::iterator ch = _Channels.begin(); ch != _Channels.end(); ch++) {
+		std::map<User*, bool> usrs = (*ch)->getUsers();
+		for (std::map<User*, bool>::iterator usr = usrs.begin(); usr != usrs.end(); usr++) {
+			if (user == usr->first)
+				(*ch)->delMember(user);
+		}
+		std::set<std::string> invitelist = (*ch)->getInviteList();
+		for (std::set<std::string>::iterator invite = invitelist.begin(); invite != invitelist.end(); invite++) {
+			if (*invite == nick)
+				(*ch)->delInvitingList(nick);
+		}
+	}
+}
