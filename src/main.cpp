@@ -47,8 +47,8 @@ int main (int ac, char **av)
 	while (g_active){
 		server.run();
 		cmd = server.get_command();
-		
-
+		if (!g_active)
+			break ;
 		for (std::vector<std::pair<int, std::string> >::iterator it = cmd.begin(); it != cmd.end(); it ++)
 		{
 			command.exec_cmd((*it).second, server.fd2User((*it).first), server);

@@ -23,7 +23,7 @@ int	Command::invite( Server &server ) {
 void	Command::InviteMessanger( Server &server, int invitedFd ) {
 	std::string	msg;
 
-	msg = ":" + _user->getPrefix() + " INVITE " + _divCmd[1] + _divCmd[2] + '\n';
+	msg = ":" + _user->getPrefix() + " INVITE " + _divCmd[1] + " " + _divCmd[2] + '\n';
 	server.ft_send(invitedFd, msg);
 	msg = ":ft_irc 341 " + _user->getNickName() + " " + _divCmd[2] + " :" + _divCmd[1] + "\n";
 	server.ft_send(_user->getFd(), msg);

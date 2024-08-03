@@ -3,6 +3,7 @@
 
 #include "irc.hpp"
 #include "User.hpp"
+#include "Channel.hpp"
 
 #define SERVER_ADDR "127.0.0.1"
 #define SERVER_PORT 8080
@@ -32,10 +33,11 @@ class	Socket
 		void	recv_fd(int i);
 		void	send_fd(int i);
 		void	new_connection();
+		void	close_connection(int fd);
 	protected:
 		std::set<User*>		_Users;
+		std::set<Channel*>	_Channels;
 	public:
-		void	close_connection(int fd);
 		Socket();
 		Socket(int port_server);
 		~Socket();
@@ -44,6 +46,7 @@ class	Socket
 		void	event_epollout(int fd);
 		void	event_epollin(int fd);
 		User*		fd2User(int fd);
+		void	del_user_all(int fd);
 
 };
 

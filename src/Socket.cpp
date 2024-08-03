@@ -8,7 +8,7 @@ Socket::~Socket(){
 
 std::vector<std::pair<int, std::string> >	Socket::get_command(){return _lst;}
 
-Socket::Socket(int port_server){  
+Socket::Socket(int port_server){
     _addr_server.sin_addr.s_addr = INADDR_ANY;
     _addr_server.sin_port = htons(port_server);
     _addr_server.sin_family = AF_INET;
@@ -30,12 +30,7 @@ Socket::Socket(int port_server){
 }
 
 void	Socket::_set_non_blocking(int fd){
-	int	flags = fcntl(fd, F_GETFL, 0);
-	if (flags == -1){
-		_exit_mes("fcntl F_GETFL");
-	}
-	flags |= O_NONBLOCK;
-	if (fcntl(fd, F_SETFL, flags) == -1){
+	if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1){
 		_exit_mes("fcntl F_SETFL" );
 	}
 }
@@ -110,9 +105,9 @@ void	Socket::new_connection(){
 
 void	Socket::recv_fd(int i){
 	_fd = _events[i].data.fd;
-	std::string buf(BUF_SIZE, '\0');
+	char	buf[BUF_SIZE];
 	ssize_t	byte;
-	byte = recv(_fd, &buf[0], BUF_SIZE, 0);
+	byte = recv(_fd, buf, BUF_SIZE, 0);
 	if (byte == -1){
 		if (errno == EAGAIN) // errno == EWOULDBLOCK 同じらしい
 			std::cerr << "Read would block on fd " << _fd << std::endl;
@@ -127,7 +122,9 @@ void	Socket::recv_fd(int i){
 		close_connection(_fd);
 		return ;
 	}
-	_lst.push_back(std::make_pair(_fd, buf));
+	buf[byte] = 0;
+	std::string buffer = buf;
+	_lst.push_back(std::make_pair(_fd, buffer));
 	std::cout << "Reciver from " << _fd << std::endl << buf;//ここで確認
 }
 
@@ -137,8 +134,6 @@ void	Socket::send_fd(int i){
 	User *user = fd2User(_fd);
 	std::string	mes = user->getMessage();
 	byte = send(_fd, mes.c_str(), mes.size(), 0);
-	// std::string  buf = "BAKA\n";
-	// byte = send(_fd, buf.c_str(), buf.size(), 0);
 	if (byte == -1){
 		if (errno == EAGAIN)
 			std::cerr << "Send Would block on fd " << _fd << std::endl;
@@ -160,6 +155,7 @@ void	Socket::close_connection(int filedescriptor){
 	if ((close(filedescriptor)) < 0)
 		_exit_mes("close");
 	User *deluser = fd2User(filedescriptor);
+	del_user_all(filedescriptor);
 	_Users.erase(deluser);
 	delete deluser;
 }
@@ -173,3 +169,23 @@ User*	Socket::fd2User(int fd) {
 	//すべてのユーザーに必要なfdが割り当てられてるのでNULLにはならない
 	return (NULL);
 };
+
+void	Socket::del_user_all(int fd) {
+	User* 		user = fd2User(fd);
+	std::string	nick = user->getNickName();
+
+	if (user == NULL)
+		return ;
+	for (std::set<Channel*>::iterator ch = _Channels.begin(); ch != _Channels.end(); ch++) {
+		std::map<User*, bool> usrs = (*ch)->getUsers();
+		for (std::map<User*, bool>::iterator usr = usrs.begin(); usr != usrs.end(); usr++) {
+			if (user == usr->first)
+				(*ch)->delMember(user);
+		}
+		std::set<std::string> invitelist = (*ch)->getInviteList();
+		for (std::set<std::string>::iterator invite = invitelist.begin(); invite != invitelist.end(); invite++) {
+			if (*invite == nick)
+				(*ch)->delInvitingList(nick);
+		}
+	}
+}

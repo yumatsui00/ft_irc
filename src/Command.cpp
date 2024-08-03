@@ -10,6 +10,7 @@ void	c( int status, std::vector<std::string> cmd ) {
 		std::cout << (*it) << std::endl;
 	}
 	std::cout << "-------------" << std::endl;
+	(void)status, (void)cmd;
 }
 
 Command::Command( Command &src )
@@ -20,21 +21,22 @@ void	Command::exec_cmd(std::string &cmds, User *user , Server &serv) {
 	this->_user = user;
 	this->_lst.clear();
 
+	// std::cout << "size=" << cmds.size() << std::endl;
 	//なぜか\rが入っているので消去
 	std::size_t find;
 	while ((find = cmds.find("\r")) != std::string::npos)
 		cmds.erase(find, 1);
-
 	//cmds改行があったらコマンド完成、なかったら未完成のため保存。改行があるかつ最後が改行じゃないのは仕様上同時に送られないらしい、、、ので対応不要
 	find = cmds.find("\n");
 	if (find == std::string::npos) {
 		this->_user->add_cmd_strage(cmds);
 		return ;
 	} else {
-		cmds.insert(0, this->_user->get_cmd_strage());
+		std::string stored = user->get_cmd_strage();
 		this->_user->clear_cmd_strage();
+		cmds.insert(0, stored);
 	}
-
+	std::cout << "cmd = " << cmds << std::endl;
 	//irssi は改行を復数同時に送れるが、最後が必ず改行になっている仕様
 	//一度に複数のコマンド（改行）が送られてきたときのため_lstで分割して保存
 	int	status;
@@ -45,10 +47,10 @@ void	Command::exec_cmd(std::string &cmds, User *user , Server &serv) {
 	for (std::vector<std::string>::iterator it = _lst.begin(); it != _lst.end(); it ++) {
 		set_cmd(*it);
 		status = exec(serv);
-		if (status == 999)
+		c(status, _divCmd);
+		if (status == QUIT_NUM)
 			break ;
 		printError(status, serv);
-		c(status, _divCmd);
 	}
 
 	//ft_send(fd[0 ~ n], messeage);

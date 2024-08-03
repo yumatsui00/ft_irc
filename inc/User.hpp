@@ -15,7 +15,7 @@ private:
 	std::string _cmd_strage; //add
 	User() {};
 public:
-	User(int fd) : _fd(fd) {};
+	User(int fd) : _fd(fd), _passok(false), _registered(false) {};
 	~User() {};
 	//!---------------------GETTER-----------------------------
 	int			getFd( void ) const;

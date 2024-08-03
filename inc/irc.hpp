@@ -2,6 +2,7 @@
 # define IRC_HPP
 
 #include <arpa/inet.h>
+#include <ctime>
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
